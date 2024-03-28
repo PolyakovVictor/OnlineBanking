@@ -11,8 +11,8 @@ function HomePage() {
             <p className="lead">Керуйте своїми фінансами легко та безпечно з нашим онлайн-банкінгом.</p>
             <a href="#" className="btn btn-primary btn-lg">Дізнатися більше</a>
           </div>
-          <div className="col-md-6">
-            <img src="bank.jpg" alt="Онлайн Банкинг" className="img-fluid"></img>
+          <div className="col-md-6 rounded">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQwCZGktizP7Uwov28y8yGMOV8bFUWvXWHWW04JFHrMGA&s" alt="Онлайн Банкинг" className="img-fluid rounded"></img>
           </div>
         </div>
       </div>

@@ -1,50 +1,11 @@
 import React, { useState } from 'react';
 import Navbar from '../../components/Navbar/Navbar';
+import DepositService from '../../components/DepositService/DepositeService';
+import CreditService from '../../components/CreditService/CreditService';
+import InvestmentService from '../../components/InvestmentService/InvestmentCalculator';
 
-const КредитнийСервіс: React.FC = () => {
-  return (
-    <div>
-      <h3>Кредити</h3>
-      <ul>
-        <li>Потребительскі кредити</li>
-        <li>Іпотечні кредити</li>
-        <li>Автокредити</li>
-        <li>Бізнес-кредити</li>
-      </ul>
-      {/* Додайте тут калькулятор кредиту */}
-    </div>
-  );
-};
 
-const ДепозитнийСервіс: React.FC = () => {
-  return (
-    <div>
-      <h3>Депозити</h3>
-      <ul>
-        <li>Депозити до запиту</li>
-        <li>Термінові депозити</li>
-        <li>Накопичувальні рахунки</li>
-      </ul>
-      {/* Додайте тут калькулятор депозиту */}
-    </div>
-  );
-};
-
-const ІнвестиційнийСервіс: React.FC = () => {
-  return (
-    <div>
-      <h3>Інвестиції</h3>
-      <ul>
-        <li>Інвестиційні фонди</li>
-        <li>Акції та облігації</li>
-        <li>Інвестиційні частки</li>
-      </ul>
-      {/* Додайте тут інформацію про інвестиційні можливості */}
-    </div>
-  );
-};
-
-const ІншіСервіси: React.FC = () => {
+const OtherServices: React.FC = () => {
   return (
     <div>
       <h3>Інші послуги</h3>
@@ -101,16 +62,40 @@ const СторінкаСервісів: React.FC = () => {
         </ul>
         <div className="tab-content">
           <div className={`tab-pane fade ${activeTab === 'credit' ? 'show active' : ''}`}>
-            <КредитнийСервіс />
+            <div className="container py-5">
+              <CreditService
+                currency="€"
+                minLoanAmount={1000}
+                maxLoanAmount={100000}
+                minTerm={1}
+                maxTerm={30}
+                annualInterestRate={8}
+              />
+            </div>
           </div>
           <div className={`tab-pane fade ${activeTab === 'deposit' ? 'show active' : ''}`}>
-            <ДепозитнийСервіс />
+            <div className='container py-5'>
+              <DepositService
+                initialDeposit={1000}
+                currency="€"
+                minDeposit={1000}
+                term="24 місяці під 15%"
+                annualInterestRate={15}
+                taxRate={12.07}
+              />
+            </div>
           </div>
           <div className={`tab-pane fade ${activeTab === 'investment' ? 'show active' : ''}`}>
-            <ІнвестиційнийСервіс />
+            <div className="container py-5">
+              <InvestmentService
+                currency="€"
+                minInvestment={1000}
+                expectedAnnualReturn={7}
+              />
+            </div>
           </div>
           <div className={`tab-pane fade ${activeTab === 'other' ? 'show active' : ''}`}>
-            <ІншіСервіси />
+            <OtherServices />
           </div>
         </div>
       </div>
