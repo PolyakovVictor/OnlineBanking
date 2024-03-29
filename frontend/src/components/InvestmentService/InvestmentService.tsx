@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 
-interface InvestmentCalculatorProps {
+interface InvestmentServiceProps {
   currency: string;
   minInvestment: number;
   expectedAnnualReturn: number;
 }
 
-const InvestmentCalculator: React.FC<InvestmentCalculatorProps> = ({
+const InvestmentService: React.FC<InvestmentServiceProps> = ({
   currency,
   minInvestment,
   expectedAnnualReturn,
@@ -82,4 +82,4 @@ const InvestmentCalculator: React.FC<InvestmentCalculatorProps> = ({
   );
 };
 
-export default InvestmentCalculator;
+export default InvestmentService;

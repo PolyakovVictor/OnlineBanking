@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Navbar from '../../components/Navbar/Navbar';
 import DepositService from '../../components/DepositService/DepositeService';
 import CreditService from '../../components/CreditService/CreditService';
-import InvestmentService from '../../components/InvestmentService/InvestmentCalculator';
+import InvestmentService from '../../components/InvestmentService/InvestmentService';
 
 
 const OtherServices: React.FC = () => {

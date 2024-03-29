@@ -44,6 +44,16 @@ function HomePage() {
             </div>
           </div>
         </div>
+        <div className="row my-4">
+          <div className="col-md-4">
+            <div className="card">
+              <div className="card-body">
+                <h5 className="card-title"> USD</h5>
+                <p className="card-text">Курс 20 до 1</p>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
       </>
   )
