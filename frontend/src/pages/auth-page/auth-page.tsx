@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Navbar from '../../components/Navbar/Navbar';
-import LoginForm from '../../forms/LoginForm/LoginForm';
-import RegistrationForm from '../../forms/RegistrationForm/RegistrationForm';
+import LoginForm from '../../forms/auth-forms/login.form';
+import RegistrationForm from '../../forms/auth-forms/registration.form';
 import { AuthService } from "../../service/auth.service";
 
 

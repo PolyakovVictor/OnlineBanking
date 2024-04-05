@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-interface CreditServiceProps {
+interface CreditCalcProps {
   currency: string;
   minLoanAmount: number;
   maxLoanAmount: number;
@@ -9,7 +9,7 @@ interface CreditServiceProps {
   annualInterestRate: number;
 }
 
-const CreditService: React.FC<CreditServiceProps> = ({
+const CreditCalc: React.FC<CreditCalcProps> = ({
   currency,
   minLoanAmount,
   maxLoanAmount,
@@ -96,4 +96,4 @@ const CreditService: React.FC<CreditServiceProps> = ({
   );
 };
 
-export default CreditService;
+export default CreditCalc;

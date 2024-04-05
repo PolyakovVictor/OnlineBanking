@@ -1,6 +1,7 @@
 from rest_framework import viewsets
 from .serializers import CustomerSerializer, AccountSerializer
 from .models import Customer, Account
+from django.core.mail import send_mail
 
 
 class CustomerViewSet(viewsets.ModelViewSet):

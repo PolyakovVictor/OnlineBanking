@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import Navbar from '../../components/Navbar/Navbar';
-import DepositService from '../../components/DepositService/DepositeService';
-import CreditService from '../../components/CreditService/CreditService';
-import InvestmentService from '../../components/InvestmentService/InvestmentService';
+import DepositCalc from '../../components/deposit-calc/deposite-calc';
+import CreditCalc from '../../components/credit-calc/credit-calc';
+import InvestmentCalc from '../../components/investment-calc/investment-calc';
 
 
 const OtherServices: React.FC = () => {
@@ -63,7 +63,7 @@ const СторінкаСервісів: React.FC = () => {
         <div className="tab-content">
           <div className={`tab-pane fade ${activeTab === 'credit' ? 'show active' : ''}`}>
             <div className="container py-5">
-              <CreditService
+              <CreditCalc
                 currency="€"
                 minLoanAmount={1000}
                 maxLoanAmount={100000}
@@ -75,7 +75,7 @@ const СторінкаСервісів: React.FC = () => {
           </div>
           <div className={`tab-pane fade ${activeTab === 'deposit' ? 'show active' : ''}`}>
             <div className='container py-5'>
-              <DepositService
+              <DepositCalc
                 initialDeposit={1000}
                 currency="€"
                 minDeposit={1000}
@@ -87,7 +87,7 @@ const СторінкаСервісів: React.FC = () => {
           </div>
           <div className={`tab-pane fade ${activeTab === 'investment' ? 'show active' : ''}`}>
             <div className="container py-5">
-              <InvestmentService
+              <InvestmentCalc
                 currency="€"
                 minInvestment={1000}
                 expectedAnnualReturn={7}
