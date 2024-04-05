@@ -5,7 +5,7 @@ from .models import Customer, Account
 class CustomerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Customer
-        fields = ['id', 'user', 'phone_number', 'address']
+        fields = '__all__'
 
 
 class AccountSerializer(serializers.ModelSerializer):

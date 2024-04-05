@@ -17,7 +17,7 @@ class AccountInline(admin.StackedInline):
 @admin.register(Customer)
 class CustomerAdmin(admin.ModelAdmin):
     inlines = [AccountInline]
-    list_display = ('user', 'phone_number', 'address')
+    list_display = ('username', 'email', 'first_name', 'last_name', 'phone_number', 'address')
 
 
 @admin.register(Account)
