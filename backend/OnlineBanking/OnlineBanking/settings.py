@@ -11,9 +11,13 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
 from pathlib import Path
+from dotenv import load_dotenv
+import os
 
 from datetime import timedelta  # SIMPLE JWT settings
 
+
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -175,3 +179,12 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Email verification
+
+EMAIL_BACKEND = os.getenv('DJANGO_EMAIL_BACKEND')
+EMAIL_HOST = os.getenv('DJANGO_EMAIL_HOST')
+EMAIL_PORT = os.getenv('DJANGO_EMAIL_PORT')
+EMAIL_HOST_USER = os.getenv('DJANGO_EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.getenv('DJANGO_EMAIL_HOST_PASSWORD')
+EMAIL_USE_TLS = os.getenv('DJANGO_EMAIL_USE_TLS')
