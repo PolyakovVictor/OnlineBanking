@@ -4,6 +4,13 @@ from .models import Customer, Account
 
 
 class CustomerViewSet(viewsets.ModelViewSet):
+    send_mail(
+        'Subject here',
+        'Here is the message.',
+        'djangosmtp32@gmail.com',
+        ['lolgg1855@gmail.com'],
+        fail_silently=False,
+    )    
     queryset = Customer.objects.all()
     serializer_class = CustomerSerializer
 
