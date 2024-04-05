@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-interface DepositServiceProps {
+interface DepositCalcProps {
   initialDeposit: number;
   currency: string;
   minDeposit: number;
@@ -9,7 +9,7 @@ interface DepositServiceProps {
   taxRate: number;
 }
 
-const DepositService: React.FC<DepositServiceProps> = ({
+const DepositCalc: React.FC<DepositCalcProps> = ({
   initialDeposit,
   currency,
   minDeposit,
@@ -85,4 +85,4 @@ const DepositService: React.FC<DepositServiceProps> = ({
   );
 };
 
-export default DepositService;
+export default DepositCalc;
