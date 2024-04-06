@@ -3,8 +3,10 @@ from django.contrib.auth.models import AbstractUser
 
 
 class Customer(AbstractUser):
-    phone_number = models.CharField(max_length=20)
+    username = models.CharField(max_length=150, blank=True, unique=True)
+    phone_number = models.CharField(max_length=20, blank=True)
     address = models.CharField(max_length=200)
+    email = models.EmailField(("email address"), blank=True, unique=True)
 
 
 class Account(models.Model):

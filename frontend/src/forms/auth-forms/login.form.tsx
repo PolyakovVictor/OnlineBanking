@@ -1,16 +1,15 @@
 import React, { useState } from 'react';
 
-const LoginForm: React.FC<{ onLogin: (email: string, password: string, phone: string) => void }> = ({ onLogin }) => {
-    const [email, setEmail] = useState('');
+const LoginForm: React.FC<{ onLogin: (username: string, password: string) => void }> = ({ onLogin }) => {
+    const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-    const [phone, setPhone] = useState('')
     const [error, setError] = useState('');
   
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
-      // Ваша логіка входу
-      if (email || phone && password) {
-        onLogin(email, password, phone);
+      if (username && password) {
+        setError('')
+        console.log(onLogin(username, password));
       } else {
         setError('Введіть ім\'я користувача та пароль');
       }
@@ -21,12 +20,26 @@ const LoginForm: React.FC<{ onLogin: (email: string, password: string, phone: st
         {error && <div className="alert alert-danger">{error}</div>}
   
         <div className="form-outline mb-4">
-          <input type="email" id="form3Example3" className="form-control" />
-          <label className="form-label" htmlFor="form3Example3">Адреса електронної пошти або номер телефону</label>
+          <input 
+            type="text" 
+            id="form3Example3" 
+            className="form-control"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+             />
+          <label className="form-label" htmlFor="form3Example3">
+              Адреса електронної пошти або номер телефону
+          </label>
         </div>
   
         <div className="form-outline mb-4">
-          <input type="password" id="form3Example4" className="form-control" />
+          <input 
+            type="password" 
+            id="form3Example4" 
+            className="form-control"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+             />
           <label className="form-label" htmlFor="form3Example4">Пароль</label>
         </div>
   

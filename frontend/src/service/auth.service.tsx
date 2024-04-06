@@ -3,9 +3,9 @@ import axios from 'axios'
 
 export const AuthService: AuthService = {
 
-    async register(userData: userRegisterData) {
+    async register(data: userRegisterData) {
         try {
-            const response = await axios.post(import.meta.env.VITE_API_URL + 'users/register/', userData);
+            const response = await axios.post(import.meta.env.VITE_API_URL + 'api/accounts/customers/', data);
             return response;
         } catch (error) {
             console.error('Error when sending a request:', error);
@@ -13,9 +13,10 @@ export const AuthService: AuthService = {
         }
     },
 
-    async login(userData: userLoginData) {
+    async login(data: userLoginData) {
         try {
-            const response = await axios.post(import.meta.env.VITE_API_URL + 'users/api/token/', userData);
+            const response = await axios.post(import.meta.env.VITE_API_URL + 'api/token/', data);
+            console.log(response.data.access)
             localStorage.setItem("accessToken", response.data.access);
             localStorage.setItem("refreshToken", response.data.refresh);
             return response;

@@ -8,15 +8,26 @@ import { AuthService } from "../../service/auth.service";
 const AuthPage: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'login' | 'registration'>('login');
 
-  const handleLogin = async (email: string, password: string, phone: string) => {
-    console.log('Вхід:', email, password);
-    const response = await AuthService.login(phone, email, password);
-    return response
+  const handleLogin = async (data: userLoginData) => {
+    console.log('Вхід:', data.username, data.password);
+    const userLoginData = {
+      'username': data.username,
+      'password': data.password,
+    }
+    const response = await AuthService.login(userLoginData);
   };
 
-  const handleRegistration = async (username: string, password: string) => {
-    console.log('Реєстрація:', username, password);
-    const response = await AuthService.register()
+  const handleRegistration = async (data: userRegisterData) => {
+    console.log('Реєстрація:', data.email, data.password);
+    const userRegisterData = {
+      'first_name': data.first_name,
+      'last_name': data.last_name,
+      'address': data.address,
+      'phone_number': data.phone_number,
+      'email': data.email,
+      'password': data.password,
+    }
+    const response = await AuthService.register(userRegisterData)
   };
 
   return (
