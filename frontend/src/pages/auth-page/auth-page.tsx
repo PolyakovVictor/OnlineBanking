@@ -10,24 +10,12 @@ const AuthPage: React.FC = () => {
 
   const handleLogin = async (data: userLoginData) => {
     console.log('Вхід:', data.username, data.password);
-    const userLoginData = {
-      'username': data.username,
-      'password': data.password,
-    }
-    const response = await AuthService.login(userLoginData);
+    const response = await AuthService.login(data);
   };
 
   const handleRegistration = async (data: userRegisterData) => {
     console.log('Реєстрація:', data.email, data.password);
-    const userRegisterData = {
-      'first_name': data.first_name,
-      'last_name': data.last_name,
-      'address': data.address,
-      'phone_number': data.phone_number,
-      'email': data.email,
-      'password': data.password,
-    }
-    const response = await AuthService.register(userRegisterData)
+    const response = await AuthService.register(data)
   };
 
   return (

@@ -1,4 +1,5 @@
 interface userRegisterData {
+    username: string,
     first_name: string,
     last_name: string,
     address: string,

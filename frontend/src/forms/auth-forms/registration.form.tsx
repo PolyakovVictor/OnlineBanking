@@ -1,20 +1,21 @@
 import React, { useState } from 'react';
 
-const RegistrationForm: React.FC<{ onRegister: (userInfo: UserInfo) => void }> = ({ onRegister }) => {
+const RegistrationForm: React.FC<{ onRegister: (data: userRegisterData) => void }> = ({ onRegister }) => {
   const [registrationStep, setRegistrationStep] = useState<'basicInfo' | 'emailConfirmation'>('basicInfo');
-  const [userInfo, setUserInfo] = useState<UserInfo>({
-    firstName: '',
-    lastName: '',
+  const [data, setdata] = useState<userRegisterData>({
+    username: '',
+    first_name: '',
+    last_name: '',
     email: '',
     address: '',
     password: '',
-    phoneNumber: '',
+    phone_number: '',
   });
   const [error, setError] = useState('');
 
   const handleSubmitBasicInfo = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (userInfo.firstName && userInfo.lastName && userInfo.email && userInfo.address && userInfo.password) {
+    if (data.first_name && data.last_name && data.email && data.address && data.password) {
       setRegistrationStep('emailConfirmation');
     } else {
       setError('Будь ласка, заповніть усі поля');
@@ -23,15 +24,16 @@ const RegistrationForm: React.FC<{ onRegister: (userInfo: UserInfo) => void }> =
 
   const handleSubmitEmailConfirmation = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (userInfo.phoneNumber) {
-      onRegister(userInfo);
+    if (data.phone_number) {
+      data.username = data.email
+      onRegister(data);
     } else {
       setError('Будь ласка, заповніть усі поля');
     }
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setUserInfo({ ...userInfo, [e.target.id]: e.target.value });
+    setdata({ ...data, [e.target.id]: e.target.value });
   };
 
   const renderBasicInfoForm = () => (
@@ -42,12 +44,12 @@ const RegistrationForm: React.FC<{ onRegister: (userInfo: UserInfo) => void }> =
           <div className="form-outline">
             <input
               type="text"
-              id="firstName"
+              id="first_name"
               className="form-control"
-              value={userInfo.firstName}
+              value={data.first_name}
               onChange={handleInputChange}
             />
-            <label className="form-label" htmlFor="firstName">
+            <label className="form-label" htmlFor="first_name">
               Ім'я
             </label>
           </div>
@@ -57,12 +59,12 @@ const RegistrationForm: React.FC<{ onRegister: (userInfo: UserInfo) => void }> =
           <div className="form-outline">
             <input 
               type="text"
-              id="lastName" 
+              id="last_name" 
               className="form-control"
-              value={userInfo.lastName}
+              value={data.last_name}
               onChange={handleInputChange}
             />
-            <label className="form-label" htmlFor="lastName"> 
+            <label className="form-label" htmlFor="last_name"> 
               Прізвище
             </label>
           </div>
@@ -74,7 +76,7 @@ const RegistrationForm: React.FC<{ onRegister: (userInfo: UserInfo) => void }> =
           type="email"
           id="email" 
           className="form-control"
-          value={userInfo.email}
+          value={data.email}
           onChange={handleInputChange}
         />
         <label className="form-label" htmlFor="email"> 
@@ -87,7 +89,7 @@ const RegistrationForm: React.FC<{ onRegister: (userInfo: UserInfo) => void }> =
           type="text" 
           id="address" 
           className="form-control"
-          value={userInfo.address}
+          value={data.address}
           onChange={handleInputChange} 
         />
         <label className="form-label" htmlFor="address"> 
@@ -100,7 +102,7 @@ const RegistrationForm: React.FC<{ onRegister: (userInfo: UserInfo) => void }> =
           type="password" 
           id="password" 
           className="form-control" 
-          value={userInfo.password}
+          value={data.password}
           onChange={handleInputChange}
         />
         <label className="form-label" htmlFor="password"> 
@@ -120,12 +122,12 @@ const RegistrationForm: React.FC<{ onRegister: (userInfo: UserInfo) => void }> =
       <div className="form-outline mb-4">
         <input
           type="tel"
-          id="phoneNumber"
+          id="phone_number"
           className="form-control"
-          value={userInfo.phoneNumber}
+          value={data.phone_number}
           onChange={handleInputChange}
         />
-        <label className="form-label" htmlFor="phoneNumber">
+        <label className="form-label" htmlFor="phone_number">
           Номер телефону
         </label>
       </div>
@@ -143,13 +145,13 @@ const RegistrationForm: React.FC<{ onRegister: (userInfo: UserInfo) => void }> =
   );
 };
 
-interface UserInfo {
-  firstName: string;
-  lastName: string;
+interface data {
+  first_name: string;
+  last_name: string;
   email: string;
   address: string;
   password: string;
-  phoneNumber?: string;
+  phone_number?: string;
 }
 
 export default RegistrationForm;
