@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-const LoginForm: React.FC<{ onLogin: (username: string, password: string) => void }> = ({ onLogin }) => {
+const LoginForm: React.FC<{ onLogin: (data: userLoginData) => void }> = ({ onLogin }) => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
@@ -9,7 +9,11 @@ const LoginForm: React.FC<{ onLogin: (username: string, password: string) => voi
       e.preventDefault();
       if (username && password) {
         setError('')
-        console.log(onLogin(username, password));
+        const userLoginData = {
+          'username': username,
+          'password': password,
+        }
+        console.log(onLogin(userLoginData));
       } else {
         setError('Введіть ім\'я користувача та пароль');
       }
@@ -41,13 +45,6 @@ const LoginForm: React.FC<{ onLogin: (username: string, password: string) => voi
             onChange={(e) => setPassword(e.target.value)}
              />
           <label className="form-label" htmlFor="form3Example4">Пароль</label>
-        </div>
-  
-        <div className="form-check d-flex justify-content-center mb-4">
-          <input className="form-check-input me-2" type="checkbox" value="" id="form2Example33" checked />
-          <label className="form-check-label" htmlFor="form2Example33">
-            Subscribe to our newsletter
-          </label>
         </div>
   
         <button type="submit" className="btn btn-primary btn-block mb-4">

@@ -10,6 +10,7 @@ class EmailOrPhoneNumberBackend(ModelBackend):
         except UserModel.DoesNotExist:
             try:
                 user = UserModel.objects.get(phone_number=username)
+                return user
             except UserModel.DoesNotExist:
                 return None
         else:
