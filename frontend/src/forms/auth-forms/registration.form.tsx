@@ -22,6 +22,7 @@ const RegistrationForm: React.FC<{ onRegister: (data: userRegisterData) => void 
         if (response.status !== 200) {
           setError(response.data);
         } else {
+          console.log('emailConfirm')
           setRegistrationStep('emailConfirmation');
         }
       } catch (error) {
