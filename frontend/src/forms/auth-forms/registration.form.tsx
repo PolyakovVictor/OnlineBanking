@@ -13,10 +13,20 @@ const RegistrationForm: React.FC<{ onRegister: (data: userRegisterData) => void 
   });
   const [error, setError] = useState('');
 
-  const handleSubmitBasicInfo = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmitBasicInfo = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (data.first_name && data.last_name && data.email && data.address && data.password) {
-      setRegistrationStep('emailConfirmation');
+      data.username = data.email;
+      try {
+        const response = await onRegister(data);
+        if (response.status !== 200) {
+          setError(response.data);
+        } else {
+          setRegistrationStep('emailConfirmation');
+        }
+      } catch (error) {
+        setError(error.message);
+      }
     } else {
       setError('Будь ласка, заповніть усі поля');
     }
@@ -25,8 +35,7 @@ const RegistrationForm: React.FC<{ onRegister: (data: userRegisterData) => void 
   const handleSubmitEmailConfirmation = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (data.phone_number) {
-      data.username = data.email
-      onRegister(data);
+      console.log('phone number step')
     } else {
       setError('Будь ласка, заповніть усі поля');
     }
@@ -145,13 +154,5 @@ const RegistrationForm: React.FC<{ onRegister: (data: userRegisterData) => void 
   );
 };
 
-interface data {
-  first_name: string;
-  last_name: string;
-  email: string;
-  address: string;
-  password: string;
-  phone_number?: string;
-}
 
 export default RegistrationForm;

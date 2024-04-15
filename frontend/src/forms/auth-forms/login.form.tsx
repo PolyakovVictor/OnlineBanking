@@ -5,7 +5,7 @@ const LoginForm: React.FC<{ onLogin: (data: userLoginData) => void }> = ({ onLog
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
   
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
       if (username && password) {
         setError('')
@@ -13,7 +13,11 @@ const LoginForm: React.FC<{ onLogin: (data: userLoginData) => void }> = ({ onLog
           'username': username,
           'password': password,
         }
-        console.log(onLogin(userLoginData));
+        try {
+          const response = await onLogin(userLoginData);
+        } catch (error) {
+          setError(error.message);
+        }
       } else {
         setError('Введіть ім\'я користувача та пароль');
       }

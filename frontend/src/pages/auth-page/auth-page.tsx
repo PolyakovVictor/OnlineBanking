@@ -11,11 +11,13 @@ const AuthPage: React.FC = () => {
   const handleLogin = async (data: userLoginData) => {
     console.log('Вхід:', data.username, data.password);
     const response = await AuthService.login(data);
+    return response;
   };
 
   const handleRegistration = async (data: userRegisterData) => {
     console.log('Реєстрація:', data.email, data.password);
-    const response = await AuthService.register(data)
+    const response = await AuthService.register(data);
+    return response;
   };
 
   return (
