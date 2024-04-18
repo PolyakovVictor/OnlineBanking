@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Account, Customer
+from .models import Account, Customer, EmailConfirmation
 from Transaction.models import Transaction
 
 
@@ -24,3 +24,10 @@ class CustomerAdmin(admin.ModelAdmin):
 class AccountAdmin(admin.ModelAdmin):
     inlines = [TransactionInline]
     list_display = ('account_number', 'account_type', 'balance', 'customer')
+
+
+@admin.register(EmailConfirmation)
+class EmailConfirmationAdmin(admin.ModelAdmin):
+    list_display = ['customer', 'confirmation_code', 'created_at']
+    search_fields = ['customer__username', 'customer__email', 'confirmation_code']
+    list_filter = ['created_at']

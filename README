@@ -1,2 +1,1 @@
-- need to add email verification to register
-- fix bug after register 
+- Send response with jwt tokens after register user in django

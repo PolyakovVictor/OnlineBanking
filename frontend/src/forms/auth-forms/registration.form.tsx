@@ -1,17 +1,17 @@
 import React, { useState } from 'react';
 
-const RegistrationForm: React.FC<{ onRegister: (data: userRegisterData) => void }> = ({ onRegister }) => {
+const RegistrationForm: React.FC<{ onRegister: (data: userRegisterData) => void, onConfirmCode: (confirmation_code: string) => void}> = ({ onRegister, onConfirmCode }) => {
   const [registrationStep, setRegistrationStep] = useState<'basicInfo' | 'emailConfirmation'>('basicInfo');
-  const [data, setdata] = useState<userRegisterData>({
+  const [data, setData] = useState<userRegisterData>({
     username: '',
     first_name: '',
     last_name: '',
     email: '',
     address: '',
     password: '',
-    phone_number: '',
   });
   const [error, setError] = useState('');
+  const [emailConfirmCode, setEmailConfirmCode] = useState('')
 
   const handleSubmitBasicInfo = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -36,15 +36,21 @@ const RegistrationForm: React.FC<{ onRegister: (data: userRegisterData) => void 
 
   const handleSubmitEmailConfirmation = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (data.phone_number) {
-      console.log('phone number step')
+    if (emailConfirmCode) {
+      onConfirmCode(emailConfirmCode)
+      console.log('phone number step', emailConfirmCode)
+      
     } else {
       setError('Будь ласка, заповніть усі поля');
     }
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setdata({ ...data, [e.target.id]: e.target.value });
+    setData({ ...data, [e.target.id]: e.target.value });
+  };
+
+  const handleConfirmCodeInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setEmailConfirmCode(e.target.value);
   };
 
   const renderBasicInfoForm = () => (
@@ -132,19 +138,19 @@ const RegistrationForm: React.FC<{ onRegister: (data: userRegisterData) => void 
       {error && <div className="alert alert-danger">{error}</div>}
       <div className="form-outline mb-4">
         <input
-          type="tel"
-          id="phone_number"
+          type="text"
+          id="verif_code"
           className="form-control"
-          value={data.phone_number}
-          onChange={handleInputChange}
+          value={emailConfirmCode}
+          onChange={handleConfirmCodeInputChange}
         />
-        <label className="form-label" htmlFor="phone_number">
-          Номер телефону
+        <label className="form-label" htmlFor="verif_code">
+          Код з електронної пошти
         </label>
       </div>
       
       <button type="submit" className="btn btn-primary btn-block mb-4">
-        Подтвердить
+        Підтвердити
       </button>
     </form>
   );

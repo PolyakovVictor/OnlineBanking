@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.utils import timezone
 
 
 class Customer(AbstractUser):
@@ -14,3 +15,12 @@ class Account(models.Model):
     account_number = models.CharField(max_length=20, unique=True)
     account_type = models.CharField(max_length=50)
     balance = models.DecimalField(max_digits=12, decimal_places=2, default=0)
+
+
+class EmailConfirmation(models.Model):
+    customer = models.OneToOneField(Customer, on_delete=models.CASCADE)
+    confirmation_code = models.CharField(max_length=100)
+    created_at = models.DateTimeField(default=timezone.now)
+
+    def __str__(self):
+        return f"Confirmation code for {self.customer.username}"

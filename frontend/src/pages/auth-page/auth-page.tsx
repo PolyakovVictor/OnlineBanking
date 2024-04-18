@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Navbar from '../../components/Navbar/Navbar';
 import LoginForm from '../../forms/auth-forms/login.form';
 import RegistrationForm from '../../forms/auth-forms/registration.form';
-import { AuthService } from "../../service/auth.service";
+import { AuthService } from "../../services/auth.service";
 
 
 const AuthPage: React.FC = () => {
@@ -17,6 +17,15 @@ const AuthPage: React.FC = () => {
   const handleRegistration = async (data: userRegisterData) => {
     console.log('Реєстрація:', data.email, data.password);
     const response = await AuthService.register(data);
+    return response;
+  };
+
+  const handleConfirmCode = async (confirmation_code: string) => {
+    console.log('handleConfirmCode ', confirmation_code)
+    const data = {
+      'confirmation_code': confirmation_code
+    }
+    const response = await AuthService.sendEmailVerificationCode(data);
     return response;
   };
 
@@ -68,7 +77,7 @@ const AuthPage: React.FC = () => {
                   </div>
                   <div className={`tab-pane fade ${activeTab === 'registration' ? 'show active' : ''}`}>
                     <h2 className="mt-3">Форма реєстрації</h2>
-                    <RegistrationForm onRegister={handleRegistration} />
+                    <RegistrationForm onRegister={handleRegistration} onConfirmCode={handleConfirmCode}/>
                   </div>
                 </div>
               </div>

@@ -3,7 +3,6 @@ interface userRegisterData {
     first_name: string,
     last_name: string,
     address: string,
-    phone_number: string;
     email: string,
     password: string,
 }
@@ -13,9 +12,14 @@ interface userLoginData {
     password: string,
 }
 
+interface EmailVerificationData {
+    confirmation_code: string;
+}
+
 interface AuthService {
     register(userData: userRegisterData): Promise<any>;
     login(userData: userLoginData) : Promise<any>;
     refreshToken(): Promise<any>;
     logout(): void ;
+    sendEmailVerificationCode(data: EmailVerificationData): void;
 }
