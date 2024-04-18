@@ -19,10 +19,11 @@ const RegistrationForm: React.FC<{ onRegister: (data: userRegisterData) => void 
       data.username = data.email;
       try {
         const response = await onRegister(data);
-        if (response.status !== 200) {
+        if (response.status !== 201) {
           setError(response.data);
         } else {
           console.log('emailConfirm')
+          setError('')
           setRegistrationStep('emailConfirmation');
         }
       } catch (error) {
