@@ -1,11 +1,14 @@
 import random
-from django.views import View
 from rest_framework import viewsets, status
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
-from .serializers import CustomerSerializer, AccountSerializer
+from .serializers import CustomerSerializer, AccountSerializer, ConfirmationCodeSerializer
 from .models import Customer, Account, EmailConfirmation
 from .services import send_confirmation_email
+from rest_framework_simplejwt.tokens import AccessToken, RefreshToken
+from rest_framework.views import APIView
+from rest_framework_simplejwt.authentication import JWTAuthentication
+
 
 
 def generate_account_number():
@@ -35,8 +38,10 @@ class CustomerViewSet(viewsets.ModelViewSet):
 
         send_confirmation_email(customer)
 
+        access_token = AccessToken.for_user(customer)
+        refresh_roken = RefreshToken.for_user(customer)
         headers = self.get_success_headers(serializer.data)
-        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+        return Response({'access': str(access_token), 'refresh': str(refresh_roken), 'user': serializer.data}, status=status.HTTP_201_CREATED, headers=headers)
 
     def perform_create(self, serializer):
         return serializer.save()
@@ -47,21 +52,25 @@ class AccountViewSet(viewsets.ModelViewSet):
     serializer_class = AccountSerializer
 
 
-class ConfirmEmailView(View):
-    permission_classes = (IsAuthenticated, )
+class ConfirmEmailView(APIView):
+    serializer_class = ConfirmationCodeSerializer
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
 
     def post(self, request):
-        user = request.user
-        print(request.data)
+        customer = Customer.objects.get(email=request.user)
+        data = request.data.copy()
+        data['customer'] = customer.id
 
+        print(data)
         confirmation_code = request.data.get('confirmation_code')
         if not confirmation_code:
             return Response({'error': 'Confirmation code is required'}, status=status.HTTP_400_BAD_REQUEST)
 
-        email_confirmation = EmailConfirmation.objects.filter(customer=user, confirmation_code=confirmation_code).first()
+        email_confirmation = EmailConfirmation.objects.filter(customer=customer, confirmation_code=confirmation_code).first()
         if email_confirmation:
-            user.email_confirmed = True
-            user.save()
+            customer.email_confirmed = True
+            customer.save()
             email_confirmation.delete()
             return Response({'message': 'Email confirmed successfully'})
         else:

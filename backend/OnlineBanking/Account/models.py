@@ -8,6 +8,7 @@ class Customer(AbstractUser):
     phone_number = models.CharField(max_length=20, blank=True)
     address = models.CharField(max_length=200)
     email = models.EmailField(("email address"), blank=True, unique=True)
+    email_confirmed = models.BooleanField(default=False)
 
 
 class Account(models.Model):

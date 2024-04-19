@@ -1,5 +1,14 @@
 import axios from 'axios'
 
+function getCookie(name:string) {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop().split(';').shift();
+}
+
+const csrftoken = getCookie('csrftoken');
+
+axios.defaults.headers.common['X-CSRFToken'] = csrftoken;
 
 export const AuthService: AuthService = {
 
@@ -7,6 +16,8 @@ export const AuthService: AuthService = {
         try {
             const response = await axios.post(import.meta.env.VITE_API_URL + 'api/accounts/customers/', data);
             console.log('register response: ', response)
+            localStorage.setItem("access_token", response.data.access);
+            localStorage.setItem("refresh_token", response.data.refresh);
             return response;
         } catch (error) {
             console.error('Error when sending a request:', error);
@@ -55,20 +66,24 @@ export const AuthService: AuthService = {
 
     async sendEmailVerificationCode(data: EmailVerificationData) {
         try {
+            console.log(localStorage.getItem('access_token'))
+            const csrfToken = getCookie('csrftoken');
             const response = await axios.post(
                 import.meta.env.VITE_API_URL + 'api/accounts/confirm-email',
                 data,
                 {
-                    headers: {
-                        Authorization: `Bearer ${localStorage.getItem('access_token')}`
-                    }
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': csrfToken,
+                }
                 }
             );
-            console.log(response.data)
+            console.log(response.data);
             return response;
         } catch (error) {
             console.error('Error when sending a request:', error);
             throw error;
         }
-    },
+      }
 }
