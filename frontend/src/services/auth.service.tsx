@@ -1,23 +1,26 @@
 import axios from 'axios'
 
-function getCookie(name:string) {
-    const value = `; ${document.cookie}`;
-    const parts = value.split(`; ${name}=`);
-    if (parts.length === 2) return parts.pop().split(';').shift();
-}
-
-const csrftoken = getCookie('csrftoken');
-
-axios.defaults.headers.common['X-CSRFToken'] = csrftoken;
 
 export const AuthService: AuthService = {
+
+    async getCookie(name: string): Promise<string | undefined> {
+        try {
+            const value = `; ${document.cookie}`;
+            const parts = value.split(`; ${name}=`);
+            if (parts.length === 2) return parts.pop().split(';').shift();
+            return undefined;
+        } catch (error) {
+            console.error('Error when sending a request:', error);
+            throw error;
+        }
+    },
 
     async register(data: userRegisterData) {
         try {
             const response = await axios.post(import.meta.env.VITE_API_URL + 'api/accounts/customers/', data);
             console.log('register response: ', response)
-            localStorage.setItem("access_token", response.data.access);
-            localStorage.setItem("refresh_token", response.data.refresh);
+            document.cookie = `access_token=${response.data.access}; path=/`;
+            document.cookie = `refresh_token=${response.data.refresh}; path=/`;
             return response;
         } catch (error) {
             console.error('Error when sending a request:', error);
@@ -29,8 +32,8 @@ export const AuthService: AuthService = {
         try {
             const response = await axios.post(import.meta.env.VITE_API_URL + 'api/token/', data);
             console.log(response.data.access)
-            localStorage.setItem("access_token", response.data.access);
-            localStorage.setItem("refresh_token", response.data.refresh);
+            document.cookie = `access_token=${response.data.access}; path=/`;
+            document.cookie = `refresh_token=${response.data.refresh}; path=/`;
             return response;
         } catch (error) {
             console.error('Error when sending a request:', error);
@@ -43,7 +46,7 @@ export const AuthService: AuthService = {
             const response = await axios.post(import.meta.env.VITE_API_URL + 'users/api/token/refresh/', {
                     'refresh': localStorage.getItem('refresh_token'),
             });
-            localStorage.setItem("access_token", response.data.access);
+            document.cookie = `access_token=${response.data.access}; path=/`;
             console.log('access token refreshed')
         } catch (error) {
             if (error.response.status == 401) {
@@ -56,8 +59,8 @@ export const AuthService: AuthService = {
 
     async logout() {
         try {
-            localStorage.removeItem('access_token');
-            localStorage.removeItem('refresh_token');
+            document.cookie = 'access_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+            document.cookie = 'refresh_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
         } catch (error) {
             console.error('Error while removing tokens:', error);
             throw error;
@@ -66,17 +69,14 @@ export const AuthService: AuthService = {
 
     async sendEmailVerificationCode(data: EmailVerificationData) {
         try {
-            console.log(localStorage.getItem('access_token'))
-            const csrfToken = getCookie('csrftoken');
             const response = await axios.post(
                 import.meta.env.VITE_API_URL + 'api/accounts/confirm-email',
                 data,
                 {
-                headers: {
-                    Authorization: `Bearer ${localStorage.getItem('access_token')}`,
-                    'Content-Type': 'application/json',
-                    'X-CSRFToken': csrfToken,
-                }
+                    headers: {
+                        Authorization: `Bearer ${this.getCookie('access_token')}`,
+                        'Content-Type': 'application/json',
+                    }
                 }
             );
             console.log(response.data);

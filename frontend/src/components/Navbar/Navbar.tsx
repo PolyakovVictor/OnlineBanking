@@ -24,9 +24,9 @@ const Navbar: any = () => {
                     <li className="nav-item">
                         <Link to="/profile"><a className="nav-link">Особистий кабінет</a></Link>
                     </li>
-                    <li className="nav-item">
+                    {/* <li className="nav-item">
                         <Link to="/auth"><a className="nav-link">Увійти</a></Link>
-                    </li>
+                    </li> */}
                 </ul>
             </div>
             </div>
