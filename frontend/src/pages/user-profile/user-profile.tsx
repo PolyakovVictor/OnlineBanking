@@ -1,23 +1,29 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Navbar from '../../components/Navbar/Navbar';
+import { CustomerService } from '../../services/customer.service';
+import CustomerInfoPanel from '../../components/profile-customer-info-panel/profile-customer-info-panel';
 
-interface UserAccount {
-  name: string;
-  email: string;
-  phone: string;
-  balance: number;
-  transactions: Transaction[];
-}
-
-interface Transaction {
-  id: number;
-  date: string;
-  description: string;
-  amount: number;
-}
 
 const UserProfile: React.FC = () => {
-  const userAccount: UserAccount = {
+  const [customerData, setCustomerData] = useState<CustomerAccountData | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+
+  useEffect(() => {
+    const fetchCustomerInfo = async () => {
+      try {
+        const data = await CustomerService.getCustomerInfo();
+        setCustomerData(data);
+      } catch (error) {
+        console.error('Error fetching customer info:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchCustomerInfo();
+  }, []);
+  const userAccount: CustomerAccount = {
     name: 'John Doe',
     email: 'john.doe@example.com',
     phone: '+1 123 456 7890',
@@ -34,23 +40,18 @@ const UserProfile: React.FC = () => {
     <Navbar/>
     <div className="container my-5">
     <div className="row">
-      <div className="col-md-4">
-        <div className="card">
-          <div className="card-body">
-            <h5 className="card-title">Особиста інформація</h5>
-            <p className="card-text">
-              <strong>Ім'я:</strong> {userAccount.name}
-            </p>
-            <p className="card-text">
-              <strong>Email:</strong> {userAccount.email}
-            </p>
-            <p className="card-text">
-              <strong>Телефон:</strong> {userAccount.phone}
-            </p>
-            <button className="btn btn-primary">Змінити інформацію</button>
-          </div>
-        </div>
-      </div>
+      {isLoading ? (
+        <div>Loading...</div>
+      ) : customerData ? (
+        <CustomerInfoPanel
+          first_name={customerData.first_name}
+          last_name={customerData.last_name}
+          email={customerData.email}
+          phone_number={customerData.phone_number}
+        />
+      ) : (
+        <div>No customer data available</div>
+      )}
       <div className="col-md-8">
         <div className="card">
           <div className="card-body">

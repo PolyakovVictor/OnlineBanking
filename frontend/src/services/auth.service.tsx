@@ -1,4 +1,5 @@
-import axios from 'axios'
+import axios, { AxiosErrorб } from 'axios'
+import axiosInstance from '../interceptors/axiosInstance/axiosInstance';
 
 
 export const AuthService: AuthService = {
@@ -17,10 +18,9 @@ export const AuthService: AuthService = {
 
     async register(data: userRegisterData) {
         try {
-            const response = await axios.post(import.meta.env.VITE_API_URL + 'api/accounts/customers/', data);
+            const response = await axiosInstance.post(import.meta.env.VITE_API_URL + 'api/accounts/customers/', data);
             console.log('register response: ', response)
-            document.cookie = `access_token=${response.data.access}; path=/`;
-            document.cookie = `refresh_token=${response.data.refresh}; path=/`;
+            await this.login({'username': data.username, 'password': data.password})
             return response;
         } catch (error) {
             console.error('Error when sending a request:', error);
@@ -30,10 +30,11 @@ export const AuthService: AuthService = {
 
     async login(data: userLoginData) {
         try {
-            const response = await axios.post(import.meta.env.VITE_API_URL + 'api/token/', data);
-            console.log(response.data.access)
+            const response = await axiosInstance.post(import.meta.env.VITE_API_URL + 'api/token/', data);
+            console.log(response.data)
             document.cookie = `access_token=${response.data.access}; path=/`;
             document.cookie = `refresh_token=${response.data.refresh}; path=/`;
+            localStorage.setItem('customer_id', response.data.id);
             return response;
         } catch (error) {
             console.error('Error when sending a request:', error);
@@ -43,8 +44,8 @@ export const AuthService: AuthService = {
 
     async refreshToken() {
         try {
-            const response = await axios.post(import.meta.env.VITE_API_URL + 'users/api/token/refresh/', {
-                    'refresh': localStorage.getItem('refresh_token'),
+            const response = await axiosInstance.post(import.meta.env.VITE_API_URL + 'api/token/refresh/', {
+                'refresh': await AuthService.getCookie('refresh_token')
             });
             document.cookie = `access_token=${response.data.access}; path=/`;
             console.log('access token refreshed')
@@ -69,12 +70,12 @@ export const AuthService: AuthService = {
 
     async sendEmailVerificationCode(data: EmailVerificationData) {
         try {
-            const response = await axios.post(
+            const response = await axiosInstance.post(
                 import.meta.env.VITE_API_URL + 'api/accounts/confirm-email',
                 data,
                 {
                     headers: {
-                        Authorization: `Bearer ${this.getCookie('access_token')}`,
+                        Authorization: `Bearer ${await this.getCookie('access_token')}`,
                         'Content-Type': 'application/json',
                     }
                 }

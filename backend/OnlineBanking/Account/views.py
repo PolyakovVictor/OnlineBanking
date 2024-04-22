@@ -8,7 +8,7 @@ from .services import send_confirmation_email
 from rest_framework_simplejwt.tokens import AccessToken, RefreshToken
 from rest_framework.views import APIView
 from rest_framework_simplejwt.authentication import JWTAuthentication
-
+from django.contrib.auth.hashers import make_password
 
 
 def generate_account_number():
@@ -25,6 +25,7 @@ class CustomerViewSet(viewsets.ModelViewSet):
     serializer_class = CustomerSerializer
 
     def create(self, request, *args, **kwargs):
+        request.data['password'] = make_password(request.data['password'])
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         customer = self.perform_create(serializer)
@@ -75,3 +76,20 @@ class ConfirmEmailView(APIView):
             return Response({'message': 'Email confirmed successfully'})
         else:
             return Response({'error': 'Invalid confirmation code'}, status=400)
+
+
+class MyInfoView(APIView):
+    serializer_class = CustomerSerializer
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        user = request.user
+
+        return Response({
+            'id': user.id,
+            'first_name': user.first_name,
+            'last_name': user.last_name,
+            'email': user.email,
+            'phone_number': user.phone_number
+        })

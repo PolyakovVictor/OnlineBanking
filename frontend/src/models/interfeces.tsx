@@ -24,3 +24,29 @@ interface AuthService {
     logout(): void ;
     sendEmailVerificationCode(data: EmailVerificationData): Promise<any>;
 };
+
+interface CustomerAccountData{
+    id: number,
+    first_name: string,
+    last_name: string,
+    email: string,
+    phone_number: string
+}
+
+interface CustomerService {
+    getCustomerInfo(): Promise<any>;
+}
+
+interface ProfileCustomerInfoPanel {
+    first_name: string;
+    last_name: string;
+    email: string;
+    phone_number: string;
+  }
+  
+  interface Transaction {
+    id: number;
+    date: string;
+    description: string;
+    amount: number;
+  }
