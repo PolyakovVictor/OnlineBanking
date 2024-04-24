@@ -30,7 +30,13 @@ interface CustomerAccountData{
     first_name: string,
     last_name: string,
     email: string,
-    phone_number: string
+    phone_number: string,
+    account: {
+        account_number: number
+        account_type: string
+        balance: number
+    }
+    transactions: Transaction[]
 }
 
 interface CustomerService {
@@ -42,11 +48,15 @@ interface ProfileCustomerInfoPanel {
     last_name: string;
     email: string;
     phone_number: string;
-  }
+}
   
-  interface Transaction {
+interface Transaction {
     id: number;
     date: string;
     description: string;
     amount: number;
-  }
+}
+
+interface AccountInfoProps {
+    balance: number;
+}

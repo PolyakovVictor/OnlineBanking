@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Navbar from '../../components/Navbar/Navbar';
 import { CustomerService } from '../../services/customer.service';
 import CustomerInfoPanel from '../../components/profile-customer-info-panel/profile-customer-info-panel';
+import AccountInfoPanel from '../../components/profile-account-info-panel/profile-account-info-panel';
 
 
 const UserProfile: React.FC = () => {
@@ -12,8 +13,8 @@ const UserProfile: React.FC = () => {
   useEffect(() => {
     const fetchCustomerInfo = async () => {
       try {
-        const data = await CustomerService.getCustomerInfo();
-        setCustomerData(data);
+        const response = await CustomerService.getCustomerInfo();
+        setCustomerData(response);
       } catch (error) {
         console.error('Error fetching customer info:', error);
       } finally {
@@ -53,15 +54,13 @@ const UserProfile: React.FC = () => {
         <div>No customer data available</div>
       )}
       <div className="col-md-8">
-        <div className="card">
-          <div className="card-body">
-            <h5 className="card-title">Баланс рахунку</h5>
-            <p className="card-text">
-              <strong>Поточний баланс:</strong> {userAccount.balance.toFixed(2)}
-            </p>
-            <button className="btn btn-success">Поповнити рахунок</button>
-          </div>
-        </div>
+      {isLoading ? (
+        <div>Loading...</div>
+      ) : customerData ? (
+        <AccountInfoPanel balance={customerData.account.balance} />
+      ) : (
+        <div>No customer data available</div>
+      )}
         <div className="card mt-4">
           <div className="card-body">
             <h5 className="card-title">Останні транзакції</h5>

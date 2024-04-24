@@ -9,15 +9,7 @@ from rest_framework_simplejwt.tokens import AccessToken, RefreshToken
 from rest_framework.views import APIView
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from django.contrib.auth.hashers import make_password
-
-
-def generate_account_number():
-
-    first_six_digits = ''.join([str(random.randint(0, 9)) for _ in range(6)])
-
-    remaining_digits = ''.join([str(random.randint(0, 9)) for _ in range(10)])
-
-    return first_six_digits + remaining_digits
+from .utils import generate_account_number
 
 
 class CustomerViewSet(viewsets.ModelViewSet):
@@ -36,6 +28,9 @@ class CustomerViewSet(viewsets.ModelViewSet):
             account_type='default',
             balance=0
         )
+
+        customer.account = account
+        customer.save()
 
         send_confirmation_email(customer)
 
@@ -85,11 +80,9 @@ class MyInfoView(APIView):
 
     def get(self, request):
         user = request.user
+        serializer = self.serializer_class(user)
+        print(serializer.data)
+        serialized_user = serializer.data
 
-        return Response({
-            'id': user.id,
-            'first_name': user.first_name,
-            'last_name': user.last_name,
-            'email': user.email,
-            'phone_number': user.phone_number
-        })
+        return Response(serialized_user)
+

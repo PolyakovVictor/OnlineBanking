@@ -13,7 +13,7 @@ const CustomerInfoPanel: React.FC<ProfileCustomerInfoPanel> = ({
           <div className="card-body">
             <h5 className="card-title">Особиста інформація</h5>
             <p className="card-text">
-              <strong>Ім'я:</strong> {first_name} + {last_name}
+              <strong>Ім'я:</strong> {first_name} {last_name}
             </p>
             <p className="card-text">
               <strong>Email:</strong> {email}

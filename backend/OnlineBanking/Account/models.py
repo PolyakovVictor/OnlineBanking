@@ -9,6 +9,7 @@ class Customer(AbstractUser):
     address = models.CharField(max_length=200)
     email = models.EmailField(("email address"), blank=True, unique=True)
     email_confirmed = models.BooleanField(default=False)
+    account = models.OneToOneField('Account', on_delete=models.CASCADE, null=True, blank=True, related_name='owner')
 
 
 class Account(models.Model):
