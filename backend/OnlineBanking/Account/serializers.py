@@ -11,23 +11,27 @@ class AccountSerializer(serializers.ModelSerializer):
 
 
 class CustomerSerializer(serializers.ModelSerializer):
+    account = AccountSerializer(read_only=True)
+
     class Meta:
         model = Customer
-        fields = ['id', 'username', 'email', 'phone_number', 'first_name', 'last_name', 'email_confirmed', 'password']
+        fields = ['id', 'username', 'email', 'phone_number', 'first_name', 'last_name', 'email_confirmed', 'password', 'account']
         extra_kwargs = {'password': {'write_only': True}}
 
     def create(self, validated_data):
+        account_data = validated_data.pop('account', None)
         password = validated_data.pop('password', None)
-        customer = Customer(**validated_data)
-        if password is not None:
-            customer.set_password(password)
-        customer.save()
+        customer = Customer.objects.create_user(
+            password=password,
+            **validated_data
+        )
         account = Account.objects.create(
             customer=customer,
             account_number=generate_account_number(),
             account_type='default',
             balance=0
         )
+
         return customer
 
 

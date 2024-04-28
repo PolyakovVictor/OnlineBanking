@@ -17,7 +17,6 @@ class CustomerViewSet(viewsets.ModelViewSet):
     serializer_class = CustomerSerializer
 
     def create(self, request, *args, **kwargs):
-        print(request.data)
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         customer = serializer.save()
@@ -75,7 +74,7 @@ class MyInfoView(APIView):
     def get(self, request):
         user = request.user
         serializer = self.serializer_class(user)
-        print(serializer.data)
+        print('here--->>>', serializer.data)
         serialized_user = serializer.data
 
         return Response(serialized_user)

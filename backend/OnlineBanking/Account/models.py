@@ -9,11 +9,10 @@ class Customer(AbstractUser):
     address = models.CharField(max_length=200)
     email = models.EmailField(("email address"), blank=True, unique=True)
     email_confirmed = models.BooleanField(default=False)
-    account = models.OneToOneField('Account', on_delete=models.CASCADE, null=True, blank=True, related_name='owner')
 
 
 class Account(models.Model):
-    customer = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name='accounts')
+    customer = models.OneToOneField(Customer, on_delete=models.CASCADE, related_name='account')
     account_number = models.CharField(max_length=20, unique=True)
     account_type = models.CharField(max_length=50)
     balance = models.DecimalField(max_digits=12, decimal_places=2, default=0)
