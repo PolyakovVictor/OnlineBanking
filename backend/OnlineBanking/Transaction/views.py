@@ -6,3 +6,6 @@ from .models import Transaction
 class TransactionViewSet(viewsets.ModelViewSet):
     queryset = Transaction.objects.all()
     serializer_class = TransactionSerializer
+
+    def perform_create(self, serializer):
+        serializer.save()

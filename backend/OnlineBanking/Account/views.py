@@ -17,30 +17,21 @@ class CustomerViewSet(viewsets.ModelViewSet):
     serializer_class = CustomerSerializer
 
     def create(self, request, *args, **kwargs):
-        request.data['password'] = make_password(request.data['password'])
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        customer = self.perform_create(serializer)
+        customer = serializer.save()
 
-        account = Account.objects.create(
-            customer=customer,
-            account_number=generate_account_number(),
-            account_type='default',
-            balance=0
-        )
-
-        customer.account = account
-        customer.save()
+        access_token = AccessToken.for_user(customer)
+        refresh_token = RefreshToken.for_user(customer)
 
         send_confirmation_email(customer)
 
-        access_token = AccessToken.for_user(customer)
-        refresh_roken = RefreshToken.for_user(customer)
         headers = self.get_success_headers(serializer.data)
-        return Response({'access': str(access_token), 'refresh': str(refresh_roken), 'user': serializer.data}, status=status.HTTP_201_CREATED, headers=headers)
-
-    def perform_create(self, serializer):
-        return serializer.save()
+        return Response({
+            'access': str(access_token),
+            'refresh': str(refresh_token),
+            'user': serializer.data
+        }, status=status.HTTP_201_CREATED, headers=headers)
 
 
 class AccountViewSet(viewsets.ModelViewSet):
@@ -54,11 +45,13 @@ class ConfirmEmailView(APIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request):
-        customer = Customer.objects.get(email=request.user)
+        try:
+            customer = Customer.objects.get(email=request.user.email)
+        except Customer.DoesNotExist:
+            return Response({'error': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
+
         data = request.data.copy()
         data['customer'] = customer.id
-
-        print(data)
         confirmation_code = request.data.get('confirmation_code')
         if not confirmation_code:
             return Response({'error': 'Confirmation code is required'}, status=status.HTTP_400_BAD_REQUEST)
@@ -70,7 +63,7 @@ class ConfirmEmailView(APIView):
             email_confirmation.delete()
             return Response({'message': 'Email confirmed successfully'})
         else:
-            return Response({'error': 'Invalid confirmation code'}, status=400)
+            return Response({'error': 'Invalid confirmation code'}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class MyInfoView(APIView):
@@ -85,4 +78,3 @@ class MyInfoView(APIView):
         serialized_user = serializer.data
 
         return Response(serialized_user)
-
