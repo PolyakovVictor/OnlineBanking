@@ -17,6 +17,7 @@ class CustomerViewSet(viewsets.ModelViewSet):
     serializer_class = CustomerSerializer
 
     def create(self, request, *args, **kwargs):
+        print(request.data)
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         customer = serializer.save()
