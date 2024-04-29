@@ -3,9 +3,10 @@ from .models import Account, Customer, EmailConfirmation
 from Transaction.models import Transaction
 
 
-class TransactionInline(admin.TabularInline):
+class TransactionInline(admin.StackedInline):
     model = Transaction
     extra = 0
+    fk_name = "from_account"
 
 
 class AccountInline(admin.StackedInline):
