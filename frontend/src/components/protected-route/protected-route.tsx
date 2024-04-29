@@ -5,18 +5,24 @@ interface ProtectedRouteProps {
     isAuthenticated: boolean;
     authenticationPath: string;
     outlet: ReactNode;
+    isLoading: boolean,
 };
 
 const ProtectedRoute = ({
   isAuthenticated,
   authenticationPath,
   outlet,
+  isLoading,
 }: ProtectedRouteProps) => {
-  if (isAuthenticated) {
-    return <>{outlet}</>;
-  } else {
-    return <Navigate to={{ pathname: authenticationPath }} />;
+  if (isLoading) {
+    return <div>Loading...</div>;
   }
+
+  return isAuthenticated ? (
+    outlet
+  ) : (
+    <Navigate to={{ pathname: authenticationPath }} replace />
+  );
 };
 
 export default ProtectedRoute;

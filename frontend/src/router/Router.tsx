@@ -10,6 +10,7 @@ import { AuthService } from '../services/auth.service';
 
 const Router = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const checkToken = async () => {
@@ -19,9 +20,11 @@ const Router = () => {
       } catch (error) {
         console.error('Error when checking token:', error);
         setIsAuthenticated(false);
+      } finally {
+        setIsLoading(false);
       }
     };
-
+  
     checkToken();
   }, []);
 
@@ -34,6 +37,7 @@ const Router = () => {
           element={
             <ProtectedRoute
               isAuthenticated={isAuthenticated}
+              isLoading={isLoading}
               authenticationPath="/auth"
               outlet={<UserProfile />}
             />
@@ -44,6 +48,7 @@ const Router = () => {
           element={
             <ProtectedRoute
               isAuthenticated={isAuthenticated}
+              isLoading={isLoading}
               authenticationPath="/auth"
               outlet={<ServicePage />}
             />
