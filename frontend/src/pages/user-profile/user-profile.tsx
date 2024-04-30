@@ -3,18 +3,22 @@ import Navbar from '../../components/Navbar/Navbar';
 import { CustomerService } from '../../services/customer.service';
 import CustomerInfoPanel from '../../components/profile-customer-info-panel/profile-customer-info-panel';
 import AccountInfoPanel from '../../components/profile-account-info-panel/profile-account-info-panel';
+import TransactionPanel from '../../components/profile-account-transactions-panel/profile-account-transactions-panel';
 
 
 const UserProfile: React.FC = () => {
   const [customerData, setCustomerData] = useState<CustomerAccountData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [transactionsResponse, setTransactionsResponse] = useState<TransactionResponse | null>(null);
 
 
   useEffect(() => {
     const fetchCustomerInfo = async () => {
       try {
-        const response = await CustomerService.getCustomerInfo();
-        setCustomerData(response);
+        const responseCustomer = await CustomerService.getCustomerInfo();
+        setCustomerData(responseCustomer);
+        const responseTransaction = await CustomerService.getCustomerTransaction();
+        setTransactionsResponse(responseTransaction);
       } catch (error) {
         console.error('Error fetching customer info:', error);
       } finally {
@@ -24,6 +28,9 @@ const UserProfile: React.FC = () => {
 
     fetchCustomerInfo();
   }, []);
+
+
+
   const userAccount: CustomerAccount = {
     name: 'John Doe',
     email: 'john.doe@example.com',
@@ -54,36 +61,21 @@ const UserProfile: React.FC = () => {
         <div>No customer data available</div>
       )}
       <div className="col-md-8">
-      {isLoading ? (
-        <div>Loading...</div>
-      ) : customerData ? (
-        <AccountInfoPanel balance={customerData.account.balance} />
-      ) : (
-        <div>No customer data available</div>
-      )}
-        <div className="card mt-4">
-          <div className="card-body">
-            <h5 className="card-title">Останні транзакції</h5>
-            <table className="table">
-              <thead>
-                <tr>
-                  <th>Дата</th>
-                  <th>Опис</th>
-                  <th>Сума</th>
-                </tr>
-              </thead>
-              <tbody>
-                {userAccount.transactions.map((transaction) => (
-                  <tr key={transaction.id}>
-                    <td>{transaction.date}</td>
-                    <td>{transaction.description}</td>
-                    <td>{transaction.amount.toFixed(2)}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
+        {isLoading ? (
+          <div>Loading...</div>
+        ) : customerData ? (
+          <AccountInfoPanel balance={customerData.account.balance} />
+        ) : (
+          <div>No customer data available</div>
+        )}
+
+        {isLoading ? (
+          <div>Loading...</div>
+        ) : transactionsResponse ? (
+          <TransactionPanel {...transactionsResponse} />
+        ) : (
+          <div>No customer data available</div>
+        )}
       </div>
     </div>
     </div>

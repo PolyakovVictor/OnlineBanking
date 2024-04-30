@@ -40,7 +40,9 @@ interface CustomerAccountData{
 }
 
 interface CustomerService {
-    getCustomerInfo(): Promise<any>;
+    getCustomerInfo(): Promise<CustomerAccountData>;
+    sendMoneyTransfer(data: MoneyTransferFormData): Promise<any>;
+    getCustomerTransaction(): Promise<TransactionResponse>
 }
 
 interface ProfileCustomerInfoPanel {
@@ -51,12 +53,31 @@ interface ProfileCustomerInfoPanel {
 }
   
 interface Transaction {
-    id: number;
-    date: string;
+    from_account_number: string;
+    to_account_number: string;
+    amount: string;
     description: string;
-    amount: number;
+    category: string;
+    date: string;
+}
+  
+interface TransactionResponse {
+    sender: Transaction[];
+    receiver: Transaction[];
 }
 
 interface AccountInfoProps {
     balance: number;
+}
+
+interface MoneyTransferFormProps {
+    onSubmit: (data: MoneyTransferFormData) => void;
+}
+  
+interface MoneyTransferFormData {
+    from_account_number: string;
+    to_account_number: string;
+    amount: number;
+    category?: string;
+    description?: string;
 }

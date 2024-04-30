@@ -1,3 +1,4 @@
+from django.core.exceptions import ObjectDoesNotExist
 from decimal import Decimal
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -17,7 +18,6 @@ class TransactionViewSet(APIView):
     def post(self, request):
         serializer = TransactionSerializer(data=request.data)
         if serializer.is_valid():
-            print('here-->>>', serializer.validated_data)
             from_account_number = serializer.data.get('from_account_number')
             to_account_number = serializer.data.get('to_account_number')
             amount = serializer.validated_data['amount']
@@ -38,7 +38,22 @@ class TransactionViewSet(APIView):
                 )
 
                 return Response({'success': True}, status=status.HTTP_200_OK)
-            except ValueError as e:
+            except (ValueError, ObjectDoesNotExist) as e:
                 return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class UserTransactionsView(APIView):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        account = Account.objects.get(customer=request.user)
+        from_transactions = Transaction.objects.filter(from_account=account)
+        print('here-->>>', account.account_number)
+        to_transactions = Transaction.objects.filter(to_account=account)
+        from_serializer = TransactionSerializer(from_transactions, many=True)
+        to_serializer = TransactionSerializer(to_transactions, many=True)
+        return Response({'sender': from_serializer.data, 'receiver': to_serializer.data}, status=status.HTTP_200_OK)

@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import Navbar from '../../components/Navbar/Navbar';
-import DepositCalc from '../../components/deposit-calc/deposite-calc';
-import CreditCalc from '../../components/credit-calc/credit-calc';
-import InvestmentCalc from '../../components/investment-calc/investment-calc';
+import DepositCalc from '../../components/service-deposit-calc/deposite-calc';
+import CreditCalc from '../../components/service-credit-calc/credit-calc';
+import InvestmentCalc from '../../components/service-investment-calc/investment-calc';
+import MoneyTransferForm from '../../components/service-money-transfers/service-money-transfers';
+import { CustomerService } from '../../services/customer.service';
 
 
 const OtherServices: React.FC = () => {
@@ -14,13 +16,16 @@ const OtherServices: React.FC = () => {
         <li>Оплата послуг</li>
         <li>Валютні операції</li>
       </ul>
-      {/* Додайте тут інші доступні послуги */}
     </div>
   );
 };
 
-const СторінкаСервісів: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<'credit' | 'deposit' | 'investment' | 'other'>('credit');
+const ServicePage: React.FC = () => {
+  const [activeTab, setActiveTab] = useState<'credit' | 'deposit' | 'investment' | 'other' | 'moneyTransfer'>('credit');
+  const handleSubmit = async (data: MoneyTransferFormData) => {
+    const response = await CustomerService.sendMoneyTransfer(data)
+    console.log('Submitted data:', response);
+  };
 
   return (
     <>
@@ -49,6 +54,14 @@ const СторінкаСервісів: React.FC = () => {
               onClick={() => setActiveTab('investment')}
             >
               Інвестиції
+            </button>
+          </li>
+          <li className="nav-item">
+            <button
+              className={`nav-link ${activeTab === 'moneyTransfer' ? 'active' : ''}`}
+              onClick={() => setActiveTab('moneyTransfer')}
+            >
+              Грошові перекази
             </button>
           </li>
           <li className="nav-item">
@@ -94,6 +107,9 @@ const СторінкаСервісів: React.FC = () => {
               />
             </div>
           </div>
+          <div className={`tab-pane fade ${activeTab === 'moneyTransfer' ? 'show active' : ''}`}>
+            <MoneyTransferForm onSubmit={handleSubmit} />
+          </div>
           <div className={`tab-pane fade ${activeTab === 'other' ? 'show active' : ''}`}>
             <OtherServices />
           </div>
@@ -103,4 +119,4 @@ const СторінкаСервісів: React.FC = () => {
   );
 };
 
-export default СторінкаСервісів;
+export default ServicePage;

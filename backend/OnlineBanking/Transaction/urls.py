@@ -1,8 +1,7 @@
 from django.urls import path
-from .views import TransactionViewSet
+from .views import TransactionViewSet, UserTransactionsView
 
 urlpatterns = [
-    # path('', TransactionViewSet.as_view({'get': 'list', 'post': 'create'}), name='transaction-list'),
-    # path('<int:pk>/', TransactionViewSet.as_view({'get': 'retrieve', 'put': 'update', 'delete': 'destroy'}), name='transaction-detail'),
     path('transfer/', TransactionViewSet.as_view(), name='transfer_funds'),
+    path('', UserTransactionsView.as_view(), name='user_transactions'),
 ]
