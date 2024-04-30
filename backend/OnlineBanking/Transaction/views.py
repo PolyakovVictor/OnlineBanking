@@ -52,7 +52,6 @@ class UserTransactionsView(APIView):
     def get(self, request):
         account = Account.objects.get(customer=request.user)
         from_transactions = Transaction.objects.filter(from_account=account)
-        print('here-->>>', account.account_number)
         to_transactions = Transaction.objects.filter(to_account=account)
         from_serializer = TransactionSerializer(from_transactions, many=True)
         to_serializer = TransactionSerializer(to_transactions, many=True)

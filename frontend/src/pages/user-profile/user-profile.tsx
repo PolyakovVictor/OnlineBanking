@@ -29,20 +29,6 @@ const UserProfile: React.FC = () => {
     fetchCustomerInfo();
   }, []);
 
-
-
-  const userAccount: CustomerAccount = {
-    name: 'John Doe',
-    email: 'john.doe@example.com',
-    phone: '+1 123 456 7890',
-    balance: 5000.0,
-    transactions: [
-      { id: 1, date: '2023-03-25', description: 'Salary', amount: 3000.0 },
-      { id: 2, date: '2023-03-22', description: 'Groceries', amount: -200.0 },
-      { id: 3, date: '2023-03-20', description: 'Online Shopping', amount: -150.0 },
-    ],
-  };
-
   return (
     <>
     <Navbar/>

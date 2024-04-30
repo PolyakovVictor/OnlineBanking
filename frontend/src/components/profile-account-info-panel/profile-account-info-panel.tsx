@@ -1,5 +1,4 @@
 const AccountInfoPanel: React.FC<AccountInfoProps> = ({ balance }) => {
-  console.log(balance)
   return (
       <div className="card">
           <div className="card-body">

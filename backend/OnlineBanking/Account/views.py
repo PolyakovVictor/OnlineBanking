@@ -74,7 +74,6 @@ class MyInfoView(APIView):
     def get(self, request):
         user = request.user
         serializer = self.serializer_class(user)
-        print('here--->>>', serializer.data)
         serialized_user = serializer.data
 
         return Response(serialized_user)

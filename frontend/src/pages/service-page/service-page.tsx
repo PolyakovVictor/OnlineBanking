@@ -108,7 +108,9 @@ const ServicePage: React.FC = () => {
             </div>
           </div>
           <div className={`tab-pane fade ${activeTab === 'moneyTransfer' ? 'show active' : ''}`}>
-            <MoneyTransferForm onSubmit={handleSubmit} />
+            <div className="container py-5">
+              <MoneyTransferForm onSubmit={handleSubmit} />
+            </div>
           </div>
           <div className={`tab-pane fade ${activeTab === 'other' ? 'show active' : ''}`}>
             <OtherServices />
