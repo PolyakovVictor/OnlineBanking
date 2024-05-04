@@ -1,4 +1,4 @@
-import axios, { AxiosErrorб } from 'axios'
+import { AxiosError } from 'axios';
 import axiosInstance from '../interceptors/axiosInstance/axiosInstance';
 
 
@@ -8,7 +8,12 @@ export const AuthService: AuthService = {
         try {
             const value = `; ${document.cookie}`;
             const parts = value.split(`; ${name}=`);
-            if (parts.length === 2) return parts.pop().split(';').shift();
+            if (parts.length === 2) {
+                const cookieValue = parts.pop();
+                if (cookieValue) {
+                    return cookieValue.split(';').shift();
+                }
+            }
             return undefined;
         } catch (error) {
             console.error('Error when sending a request:', error);
@@ -50,7 +55,7 @@ export const AuthService: AuthService = {
             document.cookie = `access_token=${response.data.access}; path=/`;
             console.log('access token refreshed')
         } catch (error) {
-            if (error.response.status == 401) {
+            if ((error as AxiosError).response?.status == 401) {
                 this.logout()
             }
             console.error('Error when sending a request:', error);

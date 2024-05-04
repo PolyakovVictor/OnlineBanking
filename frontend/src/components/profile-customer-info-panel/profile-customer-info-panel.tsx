@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 const CustomerInfoPanel: React.FC<ProfileCustomerInfoPanel> = ({
   first_name,

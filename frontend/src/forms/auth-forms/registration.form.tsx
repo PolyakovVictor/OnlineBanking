@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-const RegistrationForm: React.FC<{ onRegister: (data: userRegisterData) => void, onConfirmCode: (confirmation_code: string) => void}> = ({ onRegister, onConfirmCode }) => {
+const RegistrationForm: React.FC<{ onRegister: (data: userRegisterData) => any, onConfirmCode: (confirmation_code: string) => void}> = ({ onRegister, onConfirmCode }) => {
   const [registrationStep, setRegistrationStep] = useState<'basicInfo' | 'emailConfirmation'>('basicInfo');
   const [data, setData] = useState<userRegisterData>({
     username: '',
@@ -27,7 +27,7 @@ const RegistrationForm: React.FC<{ onRegister: (data: userRegisterData) => void,
           setRegistrationStep('emailConfirmation');
         }
       } catch (error) {
-        setError(error.message);
+        setError((error as Error).message);
       }
     } else {
       setError('Будь ласка, заповніть усі поля');

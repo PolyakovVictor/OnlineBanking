@@ -1,4 +1,3 @@
-import axios from 'axios'
 import { AuthService } from './auth.service';
 import axiosInstance from '../interceptors/axiosInstance/axiosInstance';
 

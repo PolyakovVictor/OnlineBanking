@@ -18,12 +18,12 @@ const LoginForm: React.FC<{ onLogin: (data: userLoginData) => void }> = ({ onLog
       }
       try {
         const response = await onLogin(userLoginData);
-        if (response) {
+        if (response !== undefined) {
           console.log("success login");
           navigate("/");
         }
       } catch (error) {
-        setError(error.message);
+        setError((error as Error).message);
       }
     } else {
       setError('Введіть ім\'я користувача та пароль');
