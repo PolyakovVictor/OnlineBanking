@@ -1,4 +1,5 @@
 import React from 'react';
+import { AuthService } from '../../services/auth.service';
 
 const CustomerInfoPanel: React.FC<ProfileCustomerInfoPanel> = ({
   first_name,
@@ -6,6 +7,9 @@ const CustomerInfoPanel: React.FC<ProfileCustomerInfoPanel> = ({
   email,
   phone_number,
 }) => {
+  const handleLogout = () => {
+    AuthService.logout()
+  };
   return (
     <>
     <div className="col-md-4">
@@ -21,7 +25,10 @@ const CustomerInfoPanel: React.FC<ProfileCustomerInfoPanel> = ({
             <p className="card-text">
               <strong>Телефон:</strong> {phone_number}
             </p>
-            <button className="btn btn-primary">Змінити інформацію</button>
+            <p>
+              <button className="btn btn-primary">Змінити інформацію</button>
+            </p>
+            <button className="btn btn-primary" onClick={handleLogout}>Вийти</button>
           </div>
         </div>
       </div>

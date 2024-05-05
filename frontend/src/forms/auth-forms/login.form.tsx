@@ -21,6 +21,7 @@ const LoginForm: React.FC<{ onLogin: (data: userLoginData) => void }> = ({ onLog
         if (response !== undefined) {
           console.log("success login");
           navigate("/");
+          window.location.reload();
         }
       } catch (error) {
         setError((error as Error).message);
