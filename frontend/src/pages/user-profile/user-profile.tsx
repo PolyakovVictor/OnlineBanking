@@ -50,7 +50,7 @@ const UserProfile: React.FC = () => {
         {isLoading ? (
           <div>Loading...</div>
         ) : customerData ? (
-          <AccountInfoPanel balance={customerData.account.balance} />
+          <AccountInfoPanel balance={customerData.account.balance} account_number={customerData.account.account_number} />
         ) : (
           <div>No customer data available</div>
         )}
