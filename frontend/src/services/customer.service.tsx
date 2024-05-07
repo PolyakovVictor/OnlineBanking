@@ -41,9 +41,29 @@ export const CustomerService: CustomerService = {
             console.error('Error when sending a request:', error);
             throw error;
         }
-      },
+    },
+    
+    async sendDeposit(data: DepositData) {
+        try {
+            const response = await axiosInstance.post(
+                import.meta.env.VITE_API_URL + 'api/transactions/deposits/',
+                data,
+                {
+                    headers: {
+                        Authorization: `Bearer ${await AuthService.getCookie('access_token')}`,
+                        'Content-Type': 'application/json',
+                    }
+                }
+            );
+            console.log(response.data);
+            return response;
+        } catch (error) {
+            console.error('Error when sending a request:', error);
+            throw error;
+        }
+    },
 
-      async getCustomerTransaction() {
+    async getCustomerTransaction() {
         try {
             const response = await axiosInstance.get(
                 import.meta.env.VITE_API_URL + 'api/transactions/',

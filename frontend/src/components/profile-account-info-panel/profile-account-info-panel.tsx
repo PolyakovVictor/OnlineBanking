@@ -25,7 +25,7 @@ const AccountInfoPanel: React.FC<AccountInfoProps> = ({ balance, account_number 
                     <strong>Поточний баланс:</strong> {balance}
                 </p>
                 <p className="card-text">
-                    <strong>Номер акаунту:</strong> {account_number}
+                    <strong>Номер рахунку:</strong> {account_number}
                 </p>
                 <button className="btn btn-success" onClick={handleClick}>Поповнити рахунок</button>
             </div>

@@ -22,9 +22,15 @@ const OtherServices: React.FC = () => {
 
 const ServicePage: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'credit' | 'deposit' | 'investment' | 'other' | 'moneyTransfer'>('credit');
+
   const handleSubmit = async (data: MoneyTransferFormData) => {
     const response = await CustomerService.sendMoneyTransfer(data)
     console.log('Submitted data:', response);
+  };
+
+  const handleDespositSubmit = async (data: DepositData) => {
+    const response = await CustomerService.sendDeposit(data)
+    console.log('Deposit submit:')
   };
 
   return (
@@ -89,10 +95,11 @@ const ServicePage: React.FC = () => {
           <div className={`tab-pane fade ${activeTab === 'deposit' ? 'show active' : ''}`}>
             <div className='container py-5'>
               <DepositCalc
+                onSubmit={handleDespositSubmit}
                 initialDeposit={1000}
                 currency="€"
                 minDeposit={1000}
-                term="24 місяці під 15%"
+                maxTerm={60}
                 annualInterestRate={15}
                 taxRate={12.07}
               />

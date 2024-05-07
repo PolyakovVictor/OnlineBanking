@@ -1,5 +1,4 @@
 from django.core.exceptions import ObjectDoesNotExist
-from decimal import Decimal
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -9,6 +8,9 @@ from .services import transfer_funds
 from .serializers import TransactionSerializer
 from Account.models import Account
 from .models import Transaction
+from rest_framework import generics
+from .models import Deposit
+from .serializers import DepositSerializer
 
 
 class TransactionViewSet(APIView):
@@ -56,3 +58,17 @@ class UserTransactionsView(APIView):
         from_serializer = TransactionSerializer(from_transactions, many=True)
         to_serializer = TransactionSerializer(to_transactions, many=True)
         return Response({'sender': from_serializer.data, 'receiver': to_serializer.data}, status=status.HTTP_200_OK)
+
+
+class DepositCreateView(generics.ListCreateAPIView):
+    queryset = Deposit.objects.all()
+    authentication_classes = [JWTAuthentication]
+    serializer_class = DepositSerializer
+    permission_classes = [IsAuthenticated]
+
+    def perform_create(self, serializer):
+        account = self.request.user.account
+        serializer.save(account=account)
+
+    def get_queryset(self):
+        return Deposit.objects.filter(account=self.request.user.account)

@@ -1,32 +1,47 @@
 import React, { useState } from 'react';
 
 interface DepositCalcProps {
+  onSubmit: (data: any) => void;
   initialDeposit: number;
   currency: string;
   minDeposit: number;
-  term: string;
+  maxTerm: number;
   annualInterestRate: number;
   taxRate: number;
 }
 
 const DepositCalc: React.FC<DepositCalcProps> = ({
+  onSubmit,
   initialDeposit,
   currency,
   minDeposit,
-  term,
+  maxTerm,
   annualInterestRate,
   taxRate,
 }) => {
   const [deposit, setDeposit] = useState<number>(initialDeposit);
+  const [term, setTerm] = useState<number>(1);
 
-  const calculateTotalAmount = (deposit: number) => {
-    const interest = deposit * (annualInterestRate / 100);
+  const calculateTotalAmount = (deposit: number, term: number) => {
+    const interest = (deposit * (annualInterestRate / 100)) * (term / 12);
     const tax = interest * (taxRate / 100);
     const totalAmount = deposit + interest - tax;
     return totalAmount;
   };
 
-  const totalAmount = calculateTotalAmount(deposit);
+  const totalAmount = calculateTotalAmount(deposit, term);
+
+  const handleSubmit = () => {
+    const depositData = {
+      amount: deposit,
+      term: term,
+      interest_rate: annualInterestRate,
+      start_date: new Date().toISOString().split('T')[0],
+      end_date: new Date(new Date().setMonth(new Date().getMonth() + term)).toISOString().split('T')[0],
+    };
+
+    onSubmit(depositData);
+  };
 
   return (
     <div className="container">
@@ -50,14 +65,21 @@ const DepositCalc: React.FC<DepositCalcProps> = ({
             </small>
           </div>
           <div className="mb-3">
-            <label className="form-label">Термін</label>
-            <p className="card-text">{term}</p>
-          </div>
-          <div className="mb-3">
-            <label className="form-label">Вклади</label>
-            <p className="card-text">
-              {deposit} {currency}
-            </p>
+            <label htmlFor="termInput" className="form-label">
+              Термін (місяців)
+            </label>
+            <input
+              type="number"
+              id="termInput"
+              value={term}
+              onChange={(e) => setTerm(parseInt(e.target.value, 10))}
+              min={12}
+              max={maxTerm}
+              className="form-control"
+            />
+            <small className="form-text text-muted">
+              Максимальний термін {maxTerm} місяців
+            </small>
           </div>
           <div className="mb-3">
             <label className="form-label">Процентна ставка</label>
@@ -79,6 +101,9 @@ const DepositCalc: React.FC<DepositCalcProps> = ({
               {(totalAmount - deposit).toFixed(2)} {currency}
             </p>
           </div>
+          <button className="btn btn-primary" onClick={handleSubmit}>
+            Відкрити депозит
+          </button>
         </div>
       </div>
     </div>

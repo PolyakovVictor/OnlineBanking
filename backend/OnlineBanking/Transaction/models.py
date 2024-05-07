@@ -12,3 +12,17 @@ class Transaction(models.Model):
 
     def __str__(self):
         return f"Transaction from {self.from_account} to {self.to_account} for {self.amount}"
+
+
+class Deposit(models.Model):
+    account = models.ForeignKey(Account, on_delete=models.CASCADE, related_name='deposits')
+    amount = models.DecimalField(max_digits=12, decimal_places=2)
+    term = models.IntegerField()
+    interest_rate = models.DecimalField(max_digits=5, decimal_places=2)
+    start_date = models.DateField()
+    end_date = models.DateField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"Deposit for {self.account.account_number} (Amount: {self.amount})"
