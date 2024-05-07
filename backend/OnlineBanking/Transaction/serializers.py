@@ -1,6 +1,5 @@
 from rest_framework import serializers
-from .models import Transaction
-from .models import Deposit
+from .models import Transaction, Deposit, Credit
 
 
 class TransactionSerializer(serializers.ModelSerializer):
@@ -16,3 +15,9 @@ class DepositSerializer(serializers.ModelSerializer):
     class Meta:
         model = Deposit
         fields = ['amount', 'term', 'interest_rate', 'start_date', 'end_date']
+
+
+class CreditSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Credit
+        fields = ['amount', 'term', 'interest_rate', 'start_date', 'end_date', 'monthly_payment']

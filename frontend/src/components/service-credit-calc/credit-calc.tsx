@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 
 interface CreditCalcProps {
+  onSubmit: (data: any) => void;
   currency: string;
   minLoanAmount: number;
   maxLoanAmount: number;
@@ -10,6 +11,7 @@ interface CreditCalcProps {
 }
 
 const CreditCalc: React.FC<CreditCalcProps> = ({
+  onSubmit,
   currency,
   minLoanAmount,
   maxLoanAmount,
@@ -25,11 +27,24 @@ const CreditCalc: React.FC<CreditCalcProps> = ({
     const numberOfPayments = loanTerm * 12;
     const numerator = loanAmount * monthlyInterestRate * Math.pow(1 + monthlyInterestRate, numberOfPayments);
     const denominator = Math.pow(1 + monthlyInterestRate, numberOfPayments) - 1;
-    const monthlyPayment = numerator / denominator;
-    return monthlyPayment;
+    const monthlyPayment = (numerator / denominator).toFixed(2);
+    return parseFloat(monthlyPayment);
   };
 
   const monthlyPayment = calculateMonthlyPayment(loanAmount, loanTerm);
+
+  const handleSubmit = () => {
+    const loanData = {
+      amount: loanAmount,
+      term: loanTerm * 12,
+      interest_rate: annualInterestRate,
+      start_date: new Date().toISOString().split('T')[0],
+      end_date: new Date(new Date().setFullYear(new Date().getFullYear() + loanTerm)).toISOString().split('T')[0],
+      monthly_payment: monthlyPayment,
+    };
+
+    onSubmit(loanData);
+  };
 
   return (
     <div className="container">
@@ -90,6 +105,9 @@ const CreditCalc: React.FC<CreditCalcProps> = ({
               {monthlyPayment.toFixed(2)} {currency}
             </p>
           </div>
+          <button className="btn btn-primary" onClick={handleSubmit}>
+            Оформити кредит
+          </button>
         </div>
       </div>
     </div>

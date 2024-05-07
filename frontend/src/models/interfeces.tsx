@@ -44,6 +44,7 @@ interface CustomerService {
     sendMoneyTransfer(data: MoneyTransferFormData): Promise<any>;
     getCustomerTransaction(): Promise<TransactionResponse>;
     sendDeposit(data: DepositData): Promise<any>;
+    sendCredit(data: CreditData): Promise<any>;
 }
 
 interface ProfileCustomerInfoPanel {
@@ -90,4 +91,13 @@ interface DepositData {
     interest_rate: number;
     start_date: string,
     end_date: string
+}
+
+interface CreditData {
+    amount: number;
+    term: number;
+    interest_rate: number;
+    start_date: string;
+    end_date: string;
+    monthly_payment: number;
 }

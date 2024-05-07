@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Transaction, Deposit
+from .models import Transaction, Deposit, Credit
 
 
 class TransactionAdmin(admin.ModelAdmin):
@@ -14,3 +14,10 @@ class DepositAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Deposit, DepositAdmin)
+
+
+class CreditAdmin(admin.ModelAdmin):
+    list_display = ('account', 'amount', 'term', 'interest_rate', 'start_date', 'end_date', 'monthly_payment', 'created_at', 'updated_at')
+
+
+admin.site.register(Credit, CreditAdmin)

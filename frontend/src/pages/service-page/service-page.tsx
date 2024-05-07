@@ -30,8 +30,14 @@ const ServicePage: React.FC = () => {
 
   const handleDespositSubmit = async (data: DepositData) => {
     const response = await CustomerService.sendDeposit(data)
-    console.log('Deposit submit:')
+    console.log('Deposit submit:', response)
   };
+
+  const handleCreditSubmit = async (data: CreditData) => {
+    const response = await CustomerService.sendCredit(data)
+    console.log('Credit submit:', response)
+  };
+
 
   return (
     <>
@@ -83,6 +89,7 @@ const ServicePage: React.FC = () => {
           <div className={`tab-pane fade ${activeTab === 'credit' ? 'show active' : ''}`}>
             <div className="container py-5">
               <CreditCalc
+                onSubmit={handleCreditSubmit}
                 currency="€"
                 minLoanAmount={1000}
                 maxLoanAmount={100000}

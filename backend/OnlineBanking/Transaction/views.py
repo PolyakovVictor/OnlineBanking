@@ -5,12 +5,10 @@ from rest_framework import status
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.permissions import IsAuthenticated
 from .services import transfer_funds
-from .serializers import TransactionSerializer
+from .serializers import TransactionSerializer, DepositSerializer, CreditSerializer
 from Account.models import Account
-from .models import Transaction
+from .models import Transaction, Deposit, Credit
 from rest_framework import generics
-from .models import Deposit
-from .serializers import DepositSerializer
 
 
 class TransactionViewSet(APIView):
@@ -72,3 +70,14 @@ class DepositCreateView(generics.ListCreateAPIView):
 
     def get_queryset(self):
         return Deposit.objects.filter(account=self.request.user.account)
+
+
+class CreditCreateView(generics.CreateAPIView):
+    queryset = Credit.objects.all()
+    authentication_classes = [JWTAuthentication]
+    serializer_class = CreditSerializer
+    permission_classes = [IsAuthenticated]
+
+    def perform_create(self, serializer):
+        account = self.request.user.account
+        serializer.save(account=account)
