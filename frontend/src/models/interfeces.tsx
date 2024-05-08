@@ -45,6 +45,7 @@ interface CustomerService {
     getCustomerTransaction(): Promise<TransactionResponse>;
     sendDeposit(data: DepositData): Promise<any>;
     sendCredit(data: CreditData): Promise<any>;
+    getCustomerCredit(): Promise<CreditData[]>;
 }
 
 interface ProfileCustomerInfoPanel {
@@ -100,4 +101,12 @@ interface CreditData {
     start_date: string;
     end_date: string;
     monthly_payment: number;
+}
+
+interface ProfileServicesListProps {
+  setSelectedService: (service: string) => void;
+}
+
+interface ProfileCreditPanelProps {
+    credits: CreditData[];
 }

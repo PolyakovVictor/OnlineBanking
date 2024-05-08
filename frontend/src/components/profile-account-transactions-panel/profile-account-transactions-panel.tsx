@@ -27,7 +27,6 @@ const TransactionPanel: React.FC<TransactionResponse> = ({ sender, receiver }) =
 
   return (
     <>
-      <div className="card mt-4">
         <div className="card-body">
           <h5 className="card-title">Останні транзакції</h5>
           <Tabs activeKey={key} onSelect={(k) => setKey(k || 'sender')} id="transaction-tabs">
@@ -81,7 +80,6 @@ const TransactionPanel: React.FC<TransactionResponse> = ({ sender, receiver }) =
             </Tab>
           </Tabs>
         </div>
-      </div>
     </>
   );
 };

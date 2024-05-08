@@ -72,7 +72,7 @@ class DepositCreateView(generics.ListCreateAPIView):
         return Deposit.objects.filter(account=self.request.user.account)
 
 
-class CreditCreateView(generics.CreateAPIView):
+class CreditCreateView(generics.ListCreateAPIView):
     queryset = Credit.objects.all()
     authentication_classes = [JWTAuthentication]
     serializer_class = CreditSerializer
@@ -81,3 +81,6 @@ class CreditCreateView(generics.CreateAPIView):
     def perform_create(self, serializer):
         account = self.request.user.account
         serializer.save(account=account)
+
+    def get_queryset(self):
+        return Credit.objects.filter(account=self.request.user.account)
