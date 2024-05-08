@@ -46,6 +46,7 @@ interface CustomerService {
     sendDeposit(data: DepositData): Promise<any>;
     sendCredit(data: CreditData): Promise<any>;
     getCustomerCredit(): Promise<CreditData[]>;
+    getCustomerDeposit(): Promise<DepositsResponse[]>;
 }
 
 interface ProfileCustomerInfoPanel {
@@ -109,4 +110,16 @@ interface ProfileServicesListProps {
 
 interface ProfileCreditPanelProps {
     credits: CreditData[];
+}
+
+interface ProfileDepositPanelProps {
+    deposits: DepositsResponse[];
+  }
+  
+interface DepositsResponse {
+    amount: number;
+    term: number;
+    interest_rate: number;
+    start_date: string;
+    end_date: string;
 }

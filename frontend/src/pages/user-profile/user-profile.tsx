@@ -6,6 +6,7 @@ import AccountInfoPanel from '../../components/profile-account-info-panel/profil
 import TransactionPanel from '../../components/profile-account-transactions-panel/profile-account-transactions-panel';
 import ProfileServicesList from '../../components/profile-services-list.tsx/profile-services-list';
 import ProfileCreditPanel from '../../components/profile-credit-panel/profile-credit-panel';
+import ProfileDepositPanel from '../../components/profile-deposit-panel/profile-deposit-panel';
 
 
 const UserProfile: React.FC = () => {
@@ -14,6 +15,7 @@ const UserProfile: React.FC = () => {
   const [transactionsResponse, setTransactionsResponse] = useState<TransactionResponse | null>(null);
   const [selectedService, setSelectedService] = useState('transactions');
   const [creditResponse, setCreditResponse] = useState<CreditData[] | null>(null);
+  const [depositResponse, setDepositResponse] = useState<DepositsResponse[] | null>(null);
 
 
   useEffect(() => {
@@ -25,6 +27,8 @@ const UserProfile: React.FC = () => {
         setTransactionsResponse(responseTransaction);
         const responseCredit = await CustomerService.getCustomerCredit();
         setCreditResponse(responseCredit);
+        const responseDeposit = await CustomerService.getCustomerDeposit();
+        setDepositResponse(responseDeposit);
       } catch (error) {
         console.error('Error fetching customer info:', error);
       } finally {
@@ -88,17 +92,17 @@ const UserProfile: React.FC = () => {
                 <div>No customer data available</div>
               )}
 
-              {/* {isLoading ? (
+              {isLoading ? (
                 <div>Loading...</div>
-              ) : transactionsResponse ? (
+              ) : depositResponse ? (
                 <>
-                  {selectedService === 'transactions' && (
-                    <TransactionPanel {...transactionsResponse} />
+                  {selectedService === 'deposit' && (
+                    <ProfileDepositPanel deposits={depositResponse} />
                   )}
                 </>
               ) : (
                 <div>No customer data available</div>
-              )} */}
+              )}
             </div>
           </div>
         </div>

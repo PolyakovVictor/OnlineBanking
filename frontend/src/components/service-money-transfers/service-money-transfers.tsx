@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-const categories = ['Food', 'Transportation', 'Utilities', 'Entertainment', 'Shopping', 'Healthcare', 'Education', 'Other'];
+const categories = ['Їжа', 'Транспорт', 'Комунальні послуги', 'Розваги', 'Покупки', 'Медицина', 'Освіта', 'Інше'];
 
 const MoneyTransferForm: React.FC<{ onSubmit: (data: any) => void }> = ({ onSubmit }) => {
   const [formData, setFormData] = useState({
@@ -32,13 +32,13 @@ const MoneyTransferForm: React.FC<{ onSubmit: (data: any) => void }> = ({ onSubm
         <div className="col-md-6">
           <div className="card">
             <div className="card-header bg-primary text-white">
-              <h4 className="mb-0">Money Transfer</h4>
+              <h4 className="mb-0">Перекази</h4>
             </div>
             <div className="card-body">
               <form onSubmit={handleSubmit}>
                 <div className="mb-3">
                   <label htmlFor="to_account_number" className="form-label">
-                    To Account Number
+                    Отримувач
                   </label>
                   <input
                     type="text"
@@ -52,7 +52,7 @@ const MoneyTransferForm: React.FC<{ onSubmit: (data: any) => void }> = ({ onSubm
                 </div>
                 <div className="mb-3">
                   <label htmlFor="amount" className="form-label">
-                    Amount
+                    Сума
                   </label>
                   <div className="input-group">
                     <span className="input-group-text">₴</span>
@@ -69,7 +69,7 @@ const MoneyTransferForm: React.FC<{ onSubmit: (data: any) => void }> = ({ onSubm
                 </div>
                 <div className="mb-3">
                   <label htmlFor="category" className="form-label">
-                    Category
+                    Категорія витрат
                   </label>
                   <select
                     className="form-select"
@@ -79,7 +79,7 @@ const MoneyTransferForm: React.FC<{ onSubmit: (data: any) => void }> = ({ onSubm
                     onChange={handleCategoryChange}
                     required
                   >
-                    <option value="">Select a category</option>
+                    <option value="">Виберіть категорію</option>
                     {categories.map((category, index) => (
                       <option key={index} value={category}>
                         {category}
@@ -89,7 +89,7 @@ const MoneyTransferForm: React.FC<{ onSubmit: (data: any) => void }> = ({ onSubm
                 </div>
                 <div className="mb-3">
                   <label htmlFor="description" className="form-label">
-                    Description
+                    Опис
                   </label>
                   <textarea
                     className="form-control"
@@ -101,7 +101,7 @@ const MoneyTransferForm: React.FC<{ onSubmit: (data: any) => void }> = ({ onSubm
                   />
                 </div>
                 <button type="submit" className="btn btn-primary">
-                  Submit
+                  Відправити
                 </button>
               </form>
             </div>
