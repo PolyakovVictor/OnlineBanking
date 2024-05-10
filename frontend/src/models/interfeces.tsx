@@ -47,6 +47,7 @@ interface CustomerService {
     sendCredit(data: CreditData): Promise<any>;
     getCustomerCredit(): Promise<CreditData[]>;
     getCustomerDeposit(): Promise<DepositsResponse[]>;
+    updateCustomerPhoneNumber(phone_number: string): Promise<any>
 }
 
 interface ProfileCustomerInfoPanel {
@@ -54,6 +55,7 @@ interface ProfileCustomerInfoPanel {
     last_name: string;
     email: string;
     phone_number: string;
+    handlePhoneNumberUpdate: () => void;
 }
   
 interface Transaction {

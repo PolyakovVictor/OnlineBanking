@@ -21,6 +21,26 @@ export const CustomerService: CustomerService = {
             throw error;
         }
     },
+    async updateCustomerPhoneNumber(phone_number) {
+        const data = {'phone_number': phone_number}
+        try {
+            const response = await axiosInstance.put(
+                import.meta.env.VITE_API_URL + 'api/accounts/customers/me/',
+                data,
+                {
+                    headers: {
+                        Authorization: `Bearer ${await AuthService.getCookie('access_token')}`,
+                        'Content-Type': 'application/json',
+                    }
+                }
+            );
+            window.location.reload();
+            return await response.data;
+        } catch (error) {
+            console.error('Error when sending a request:', error);
+            throw error;
+        }
+    },
     async sendMoneyTransfer(data: MoneyTransferFormData) {
         const user_data = this.getCustomerInfo() 
         try {

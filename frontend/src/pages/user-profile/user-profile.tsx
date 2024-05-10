@@ -7,6 +7,7 @@ import TransactionPanel from '../../components/profile-account-transactions-pane
 import ProfileServicesList from '../../components/profile-services-list.tsx/profile-services-list';
 import ProfileCreditPanel from '../../components/profile-credit-panel/profile-credit-panel';
 import ProfileDepositPanel from '../../components/profile-deposit-panel/profile-deposit-panel';
+import NotificationModal from '../../components/modal-notification-window/modal-notification-window';
 
 
 const UserProfile: React.FC = () => {
@@ -16,6 +17,9 @@ const UserProfile: React.FC = () => {
   const [selectedService, setSelectedService] = useState('transactions');
   const [creditResponse, setCreditResponse] = useState<CreditData[] | null>(null);
   const [depositResponse, setDepositResponse] = useState<DepositsResponse[] | null>(null);
+  const [showNotification, setShowNotification] = useState(false);
+  const [notificationType, setNotificationType] = useState<'phone' | 'deposit' | 'moneyTransfer' | null>(null);
+  const [phone_number, setPhone_number] = useState<string | undefined>('');
 
 
   useEffect(() => {
@@ -39,9 +43,56 @@ const UserProfile: React.FC = () => {
     fetchCustomerInfo();
   }, []);
 
+  const handlePhoneSubmit = async () => {
+    if (phone_number){
+      const response = await CustomerService.updateCustomerPhoneNumber(phone_number);
+      if (response.status === 201) {
+        handleModalClose();
+        console.log('phone updated:', response);
+      }
+    }
+  };
+
+  const handlePhoneNumberUpdate = async () => {
+    setShowNotification(true);
+    setNotificationType('phone');
+  };
+
+  const handleModalClose = () => {
+    setShowNotification(false);
+    setNotificationType(null);
+  };
+
   return (
     <>
       <Navbar/>
+      {showNotification && (
+        <NotificationModal title="Повідомлення" duration={60000} onClose={handleModalClose}>
+          <div className="notification-content">
+            {notificationType === 'phone' && (
+              <p>Введіть будь ласка ваш номер телефону</p>
+            )}
+            {notificationType === 'deposit' && (
+              <p>Вітання! Ваш депозит успішно оформлений!</p>
+            )}
+            {notificationType === 'moneyTransfer' && (
+              <p>Вітання! Ваш грошовий переказ успішно відправлений!</p>
+            )}
+            <input 
+              type="text" 
+              id="form3Example3" 
+              className="form-control"
+              value={phone_number}
+              onChange={(e) => setPhone_number(e.target.value)}
+                />
+            <div className="buttons-container mt-4">
+              <button className="btn btn-primary pl-4 pr-4" type="button" onClick={handlePhoneSubmit}>
+                <span className="icon-primary">Ок</span>
+              </button>
+            </div>
+          </div>
+        </NotificationModal>
+      )}
       <div className="container my-5">
         <div className="row">
           <div className="col-md-4">
@@ -53,6 +104,7 @@ const UserProfile: React.FC = () => {
                 last_name={customerData.last_name}
                 email={customerData.email}
                 phone_number={customerData.phone_number}
+                handlePhoneNumberUpdate={handlePhoneNumberUpdate}
               />
             ) : (
               <div>No customer data available</div>

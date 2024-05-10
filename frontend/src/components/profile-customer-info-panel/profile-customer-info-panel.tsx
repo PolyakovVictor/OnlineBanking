@@ -6,6 +6,7 @@ const CustomerInfoPanel: React.FC<ProfileCustomerInfoPanel> = ({
   last_name,
   email,
   phone_number,
+  handlePhoneNumberUpdate,
 }) => {
   const handleLogout = () => {
     AuthService.logout()
@@ -24,9 +25,11 @@ const CustomerInfoPanel: React.FC<ProfileCustomerInfoPanel> = ({
           <p className="card-text">
             <strong>Телефон:</strong> {phone_number}
           </p>
-          <p>
-            <button className="btn btn-primary">Змінити інформацію</button>
-          </p>
+          {!phone_number && (
+            <p>
+              <button className="btn btn-primary" onClick={handlePhoneNumberUpdate}>Додати номер телефону</button>
+            </p>
+          )}
           <button className="btn btn-primary" onClick={handleLogout}>Вийти</button>
         </div>
       </div>

@@ -14,6 +14,7 @@ const NotificationModal: React.FC<NotificationModalProps> = ({
 
     const timer = setTimeout(() => {
       setShow(false);
+      onClose()
     }, duration);
 
     return () => clearTimeout(timer);

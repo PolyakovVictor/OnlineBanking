@@ -72,8 +72,27 @@ class MyInfoView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
-        user = request.user
-        serializer = self.serializer_class(user)
-        serialized_user = serializer.data
-
+        try:
+            user = request.user
+            serializer = self.serializer_class(user)
+            serialized_user = serializer.data
+        except Customer.DoesNotExist:
+            return Response({'error': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
         return Response(serialized_user)
+
+    def put(self, request):
+        try:
+            customer = Customer.objects.get(email=request.user.email)
+        except Customer.DoesNotExist:
+            return Response({'error': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
+
+        phone_number = request.data.get('phone_number')
+        if not phone_number:
+            return Response({'error': 'Phone number is required'}, status=status.HTTP_400_BAD_REQUEST)
+
+        if phone_number:
+            customer.phone_number = phone_number
+            customer.save()
+            return Response({'message': 'Phone number confirmed successfully'})
+        else:
+            return Response({'error': 'Invalid phone number'}, status=status.HTTP_400_BAD_REQUEST)
