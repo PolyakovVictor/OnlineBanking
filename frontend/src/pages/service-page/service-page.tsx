@@ -5,6 +5,7 @@ import CreditCalc from '../../components/service-credit-calc/credit-calc';
 import InvestmentCalc from '../../components/service-investment-calc/investment-calc';
 import MoneyTransferForm from '../../components/service-money-transfers/service-money-transfers';
 import { CustomerService } from '../../services/customer.service';
+import NotificationModal from '../../components/modal-notification-window/modal-notification-window';
 
 
 const OtherServices: React.FC = () => {
@@ -22,26 +23,64 @@ const OtherServices: React.FC = () => {
 
 const ServicePage: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'credit' | 'deposit' | 'investment' | 'other' | 'moneyTransfer'>('credit');
+  const [showNotification, setShowNotification] = useState(false);
+  const [notificationType, setNotificationType] = useState<'credit' | 'deposit' | 'moneyTransfer' | null>(null);
 
   const handleSubmit = async (data: MoneyTransferFormData) => {
-    const response = await CustomerService.sendMoneyTransfer(data)
-    console.log('Submitted data:', response);
+    const response = await CustomerService.sendMoneyTransfer(data);
+    if (response.status === 201) {
+      setShowNotification(true);
+      setNotificationType('moneyTransfer');
+      console.log('Submitted data:', response);
+    }
   };
 
   const handleDespositSubmit = async (data: DepositData) => {
-    const response = await CustomerService.sendDeposit(data)
-    console.log('Deposit submit:', response)
+    const response = await CustomerService.sendDeposit(data);
+    if (response.status === 201) {
+      setShowNotification(true);
+      setNotificationType('deposit');
+      console.log('Deposit submit:', response);
+    }
   };
 
   const handleCreditSubmit = async (data: CreditData) => {
-    const response = await CustomerService.sendCredit(data)
-    console.log('Credit submit:', response)
+    const response = await CustomerService.sendCredit(data);
+    if (response.status === 201) {
+      setShowNotification(true);
+      setNotificationType('credit');
+      console.log('Credit submit:', response);
+    }
   };
 
+  const handleModalClose = () => {
+    setShowNotification(false);
+    setNotificationType(null);
+  };
 
   return (
     <>
       <Navbar/>
+      {showNotification && (
+        <NotificationModal title="Повідомлення" duration={15000} onClose={handleModalClose}>
+          <div className="notification-content">
+            {notificationType === 'credit' && (
+              <p>Вітання! Ваш кредит успішно оформлений!</p>
+            )}
+            {notificationType === 'deposit' && (
+              <p>Вітання! Ваш депозит успішно оформлений!</p>
+            )}
+            {notificationType === 'moneyTransfer' && (
+              <p>Вітання! Ваш грошовий переказ успішно відправлений!</p>
+            )}
+            <div className="buttons-container">
+              <button className="btn btn-primary" type="button" onClick={handleModalClose}>
+                <span className="icon-primary">Ок</span>
+              </button>
+            </div>
+          </div>
+        </NotificationModal>
+      )}
       <div className="container mt-5">
         <ul className="nav nav-tabs">
           <li className="nav-item">

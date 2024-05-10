@@ -123,3 +123,10 @@ interface DepositsResponse {
     start_date: string;
     end_date: string;
 }
+
+interface NotificationModalProps {
+    title?: string;
+    duration?: number;
+    children: React.ReactNode;
+    onClose: Function;
+}
