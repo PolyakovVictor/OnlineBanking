@@ -1,5 +1,6 @@
-from django.db import models
-from Account.models import Account
+from django.db import models, transaction
+from Account.models import Account, Customer
+from django.utils import timezone
 
 
 class Transaction(models.Model):
@@ -41,3 +42,25 @@ class Credit(models.Model):
 
     def __str__(self):
         return f"Credit for {self.account.account_number} (Amount: {self.amount})"
+
+    def save(self, *args, **kwargs):
+        # Check if this is a new credit
+        if not self.pk:
+            with transaction.atomic():
+                super().save(*args, **kwargs)  # Save the credit instance first
+                bank = Customer.objects.get(username='Bank')
+
+                bank_account = Account.objects.get(customer=bank)
+
+                # Create the corresponding transaction
+                Transaction.objects.create(
+                    from_account=bank_account,
+                    to_account=self.account,
+                    amount=self.amount,
+                    date=timezone.now(),
+                    category='Credit',
+                    description=f"Credit amount for {self.account.account_number}"
+                )
+
+        else:
+            super().save(*args, **kwargs)

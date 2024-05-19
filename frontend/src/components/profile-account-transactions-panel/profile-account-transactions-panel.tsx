@@ -35,7 +35,7 @@ const TransactionPanel: React.FC<TransactionResponse> = ({ sender, receiver }) =
                 <thead>
                   <tr>
                     <th style={{ cursor: 'pointer' }} onClick={() => { setSortBy('date'); setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc'); }}>Дата</th>
-                    <th style={{ cursor: 'pointer' }} onClick={() => { setSortBy('from_account_number'); setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc'); }}>Відправник</th>
+                    <th style={{ cursor: 'pointer' }} onClick={() => { setSortBy('to_account_number'); setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc'); }}>Отримувач</th>
                     <th style={{ cursor: 'pointer' }} onClick={() => { setSortBy('description'); setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc'); }}>Опис</th>
                     <th style={{ cursor: 'pointer' }} onClick={() => { setSortBy('amount'); setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc'); }}>Сума</th>
                     <th style={{ cursor: 'pointer' }} onClick={() => { setSortBy('category'); setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc'); }}>Категорія</th>
@@ -45,7 +45,7 @@ const TransactionPanel: React.FC<TransactionResponse> = ({ sender, receiver }) =
                   {sortTransactions(sender).map((transaction, index) => (
                     <tr key={`sender-${index}`}>
                       <td>{formatDateTime(transaction.date)}</td>
-                      <td>{transaction.from_account_number}</td>
+                      <td>{transaction.to_account_number}</td>
                       <td>{transaction.description}</td>
                       <td>{transaction.amount}</td>
                       <td>{transaction.category}</td>
@@ -59,7 +59,7 @@ const TransactionPanel: React.FC<TransactionResponse> = ({ sender, receiver }) =
                 <thead>
                   <tr>
                     <th style={{ cursor: 'pointer' }} onClick={() => { setSortBy('date'); setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc'); }}>Дата</th>
-                    <th style={{ cursor: 'pointer' }} onClick={() => { setSortBy('to_account_number'); setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc'); }}>Отримувач</th>
+                    <th style={{ cursor: 'pointer' }} onClick={() => { setSortBy('from_account_number'); setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc'); }}>Відправник</th>
                     <th style={{ cursor: 'pointer' }} onClick={() => { setSortBy('description'); setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc'); }}>Опис</th>
                     <th style={{ cursor: 'pointer' }} onClick={() => { setSortBy('amount'); setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc'); }}>Сума</th>
                     <th style={{ cursor: 'pointer' }} onClick={() => { setSortBy('category'); setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc'); }}>Категорія</th>
@@ -69,7 +69,7 @@ const TransactionPanel: React.FC<TransactionResponse> = ({ sender, receiver }) =
                   {sortTransactions(receiver).map((transaction, index) => (
                     <tr key={`receiver-${index}`}>
                       <td>{formatDateTime(transaction.date)}</td>
-                      <td>{transaction.to_account_number}</td>
+                      <td>{transaction.from_account_number}</td>
                       <td>{transaction.description}</td>
                       <td>{transaction.amount}</td>
                       <td>{transaction.category}</td>

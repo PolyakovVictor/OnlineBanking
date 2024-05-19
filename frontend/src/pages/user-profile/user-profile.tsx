@@ -72,12 +72,6 @@ const UserProfile: React.FC = () => {
             {notificationType === 'phone' && (
               <p>Введіть будь ласка ваш номер телефону</p>
             )}
-            {notificationType === 'deposit' && (
-              <p>Вітання! Ваш депозит успішно оформлений!</p>
-            )}
-            {notificationType === 'moneyTransfer' && (
-              <p>Вітання! Ваш грошовий переказ успішно відправлений!</p>
-            )}
             <input 
               type="text" 
               id="form3Example3" 
