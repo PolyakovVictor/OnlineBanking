@@ -74,7 +74,7 @@ interface TransactionResponse {
 
 interface AccountInfoProps {
     balance: number;
-    account_number: string;
+    account_number: number;
 }
 
 interface MoneyTransferFormProps {
