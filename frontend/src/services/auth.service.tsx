@@ -67,7 +67,7 @@ export const AuthService: AuthService = {
         try {
             document.cookie = 'access_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
             document.cookie = 'refresh_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
-            window.location.reload();
+            window.location.replace('/')
         } catch (error) {
             console.error('Error while removing tokens:', error);
             throw error;

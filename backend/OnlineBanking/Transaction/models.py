@@ -49,8 +49,10 @@ class Credit(models.Model):
             with transaction.atomic():
                 super().save(*args, **kwargs)  # Save the credit instance first
                 bank = Customer.objects.get(username='Bank')
+                print(bank)
 
                 bank_account = Account.objects.get(customer=bank)
+                print(bank_account)
 
                 # Create the corresponding transaction
                 Transaction.objects.create(
