@@ -128,7 +128,7 @@ const RegistrationForm: React.FC<{ onRegister: (data: userRegisterData) => any, 
       </div>
 
       <button type="submit" className="btn btn-primary btn-block mb-4">
-        Далее
+        Далі
       </button>
     </form>
   );
