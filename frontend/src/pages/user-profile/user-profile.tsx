@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import InputMask from 'react-input-mask';
 import Navbar from '../../components/Navbar/Navbar';
 import { CustomerService } from '../../services/customer.service';
 import CustomerInfoPanel from '../../components/profile-customer-info-panel/profile-customer-info-panel';
@@ -72,13 +73,15 @@ const UserProfile: React.FC = () => {
             {notificationType === 'phone' && (
               <p>Введіть будь ласка ваш номер телефону</p>
             )}
-            <input 
-              type="text" 
-              id="form3Example3" 
+            <InputMask
+              mask="+38 (999) 999-99-99"
+              maskChar="_"
+              type="tel"
+              id="form3Example3"
               className="form-control"
               value={phone_number}
-              onChange={(e) => setPhone_number(e.target.value)}
-                />
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPhone_number(e.target.value)}
+            />
             <div className="buttons-container mt-4">
               <button className="btn btn-primary pl-4 pr-4" type="button" onClick={handlePhoneSubmit}>
                 <span className="icon-primary">Ок</span>

@@ -34,7 +34,7 @@ export const CustomerService: CustomerService = {
                     }
                 }
             );
-            window.location.reload();
+            window.location.replace('/profile')
             return await response.data;
         } catch (error) {
             console.error('Error when sending a request:', error);
