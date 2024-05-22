@@ -1,6 +1,7 @@
 from django.db import models, transaction
 from Account.models import Account, Customer
 from django.utils import timezone
+from .services import transfer_funds
 
 
 class Transaction(models.Model):
@@ -49,10 +50,8 @@ class Credit(models.Model):
             with transaction.atomic():
                 super().save(*args, **kwargs)  # Save the credit instance first
                 bank = Customer.objects.get(username='Bank')
-                print(bank)
 
                 bank_account = Account.objects.get(customer=bank)
-                print(bank_account)
 
                 # Create the corresponding transaction
                 Transaction.objects.create(
@@ -63,6 +62,8 @@ class Credit(models.Model):
                     category='Credit',
                     description=f"Credit amount for {self.account.account_number}"
                 )
+
+                transfer_funds(bank_account, self.account, self.amount)
 
         else:
             super().save(*args, **kwargs)

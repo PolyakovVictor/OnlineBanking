@@ -44,3 +44,9 @@ jobs:
         source venv/bin/activate
         poetry install
       working-directory: backend/OnlineBanking/
+
+    # - name: Run Django tests
+    #   run: |
+    #     source venv/bin/activate
+    #     python manage.py test
+    #   working-directory: backend/OnlineBanking/
