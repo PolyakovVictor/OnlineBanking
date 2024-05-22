@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 
-const AccountInfoPanel: React.FC<AccountInfoProps> = ({ balance, account_number }) => {
+const AccountInfoPanel: React.FC<AccountInfoProps> = ({ onSubmit, balance, account_number }) => {
     const [showModal, setShowModal] = useState(false);
-    const [depositAmount, setDepositAmount] = useState('');
+    const [topupAmount, setTopupAmount] = useState<number>(0);
     const [paymentMethod, setPaymentMethod] = useState('');
 
     const handleClick = () => {
@@ -13,9 +13,12 @@ const AccountInfoPanel: React.FC<AccountInfoProps> = ({ balance, account_number 
         setShowModal(false);
     };
 
-    const handleDeposit = () => {
-
-    };
+    const handleSubmit = () => {
+        const data = {
+            'amount': topupAmount,
+        }
+        onSubmit(data);
+      };
 
     return (
         <div className="card">
@@ -49,11 +52,11 @@ const AccountInfoPanel: React.FC<AccountInfoProps> = ({ balance, account_number 
                                 <div className="form-group mb-4">
                                     <label htmlFor="depositAmount">Сума:</label>
                                     <input
-                                        type="text"
+                                        type="number"
                                         className="form-control"
                                         id="depositAmount"
-                                        value={depositAmount}
-                                        onChange={(e) => setDepositAmount(e.target.value)}
+                                        value={topupAmount}
+                                        onChange={(e) => setTopupAmount(parseInt(e.target.value, 10))}
                                     />
                                 </div>
                                 <div className="form-group mb-4">
@@ -70,7 +73,7 @@ const AccountInfoPanel: React.FC<AccountInfoProps> = ({ balance, account_number 
                                         <option value="bankTransfer">Банківський переказ</option>
                                     </select>
                                 </div>
-                                <button className="btn btn-primary" onClick={handleDeposit}>Поповнити</button>
+                                <button className="btn btn-primary" onClick={handleSubmit}>Поповнити</button>
                             </div>
                         </div>
                     </div>

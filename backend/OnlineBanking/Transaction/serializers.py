@@ -21,3 +21,7 @@ class CreditSerializer(serializers.ModelSerializer):
     class Meta:
         model = Credit
         fields = ['amount', 'term', 'interest_rate', 'start_date', 'end_date', 'monthly_payment']
+
+
+class TopUpSerializer(serializers.Serializer):
+    amount = serializers.DecimalField(max_digits=12, decimal_places=2)

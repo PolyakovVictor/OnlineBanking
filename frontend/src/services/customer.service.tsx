@@ -103,6 +103,27 @@ export const CustomerService: CustomerService = {
         }
     },
 
+    async sendTopup(data: TopupData) {
+        try {
+            const response = await axiosInstance.post(
+                import.meta.env.VITE_API_URL + 'api/transactions/topup/',
+                data,
+                {
+                    headers: {
+                        Authorization: `Bearer ${await AuthService.getCookie('access_token')}`,
+                        'Content-Type': 'application/json',
+                    }
+                }
+            );
+            console.log(response.data);
+            window.location.replace('/profile')
+            return response;
+        } catch (error) {
+            console.error('Error when sending a request:', error);
+            throw error;
+        }
+    },
+
     async getCustomerTransaction() {
         try {
             const response = await axiosInstance.get(

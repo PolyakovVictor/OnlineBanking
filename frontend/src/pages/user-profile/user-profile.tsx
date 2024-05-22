@@ -54,6 +54,13 @@ const UserProfile: React.FC = () => {
     }
   };
 
+  const handleTopup = async (data: TopupData) => {
+    const response = await CustomerService.sendTopup(data);
+    if (response.status === 201) {
+      console.log('TopUp submit:', response);
+    }
+};
+
   const handlePhoneNumberUpdate = async () => {
     setShowNotification(true);
     setNotificationType('phone');
@@ -113,7 +120,7 @@ const UserProfile: React.FC = () => {
             {isLoading ? (
               <div>Loading...</div>
             ) : customerData ? (
-              <AccountInfoPanel balance={customerData.account.balance} account_number={customerData.account.account_number} />
+              <AccountInfoPanel onSubmit={handleTopup} balance={customerData.account.balance} account_number={customerData.account.account_number} />
             ) : (
               <div>No customer data available</div>
             )}

@@ -45,6 +45,7 @@ interface CustomerService {
     getCustomerTransaction(): Promise<TransactionResponse>;
     sendDeposit(data: DepositData): Promise<any>;
     sendCredit(data: CreditData): Promise<any>;
+    sendTopup(data: TopupData): Promise<any>;
     getCustomerCredit(): Promise<CreditData[]>;
     getCustomerDeposit(): Promise<DepositsResponse[]>;
     updateCustomerPhoneNumber(phone_number: string): Promise<any>
@@ -73,6 +74,7 @@ interface TransactionResponse {
 }
 
 interface AccountInfoProps {
+    onSubmit: (data: any) => void;
     balance: number;
     account_number: number;
 }
@@ -104,6 +106,10 @@ interface CreditData {
     start_date: string;
     end_date: string;
     monthly_payment: number;
+}
+
+interface TopupData {
+    amount: number;
 }
 
 interface ProfileServicesListProps {

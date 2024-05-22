@@ -5,8 +5,8 @@ from rest_framework import status
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.permissions import IsAuthenticated
 from .services import transfer_funds
-from .serializers import TransactionSerializer, DepositSerializer, CreditSerializer
-from Account.models import Account
+from .serializers import TopUpSerializer, TransactionSerializer, DepositSerializer, CreditSerializer
+from Account.models import Account, Customer
 from .models import Transaction, Deposit, Credit
 from rest_framework import generics
 
@@ -84,3 +84,39 @@ class CreditCreateView(generics.ListCreateAPIView):
 
     def get_queryset(self):
         return Credit.objects.filter(account=self.request.user.account)
+
+
+class TopUpView(generics.CreateAPIView):
+    serializer_class = TopUpSerializer
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        serializer = self.get_serializer(data=request.data)
+        if serializer.is_valid():
+            amount = serializer.validated_data['amount']
+            account = request.user.account
+
+            try:
+                bank_customer = Customer.objects.get(username='Bank')
+                bank_account = Account.objects.get(customer=bank_customer)
+
+                if bank_account.balance < amount:
+                    return Response({'error': 'Insufficient funds in bank account'}, status=status.HTTP_400_BAD_REQUEST)
+
+                transfer_funds(bank_account, account, amount)
+
+                Transaction.objects.create(
+                    from_account=bank_account,
+                    to_account=account,
+                    amount=amount,
+                    category='TopUP',
+                    description=''
+                )
+
+                return Response({'success': True}, status=status.HTTP_200_OK)
+            except Customer.DoesNotExist:
+                return Response({'error': 'Bank customer does not exist'}, status=status.HTTP_400_BAD_REQUEST)
+            except Account.DoesNotExist:
+                return Response({'error': 'Bank account does not exist'}, status=status.HTTP_400_BAD_REQUEST)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
