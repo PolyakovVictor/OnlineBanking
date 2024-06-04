@@ -86,7 +86,7 @@ export const AuthService: AuthService = {
                     }
                 }
             );
-            console.log(response.data);
+            window.location.replace('/')
             return response;
         } catch (error) {
             console.error('Error when sending a request:', error);
