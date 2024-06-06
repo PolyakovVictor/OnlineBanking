@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
 import Navbar from '../../components/Navbar/Navbar';
-import DepositCalc from '../../components/service-deposit-calc/deposite-calc';
 import CreditCalc from '../../components/service-credit-calc/credit-calc';
 import InvestmentCalc from '../../components/service-investment-calc/investment-calc';
 import MoneyTransferForm from '../../components/service-money-transfers/service-money-transfers';
 import { CustomerService } from '../../services/customer.service';
 import NotificationModal from '../../components/modal-notification-window/modal-notification-window';
-
+import DepositCalc from '../../components/service-deposit-calc/deposite-calc';
 
 const OtherServices: React.FC = () => {
   return (
@@ -24,38 +23,58 @@ const OtherServices: React.FC = () => {
 const ServicePage: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'credit' | 'deposit' | 'investment' | 'other' | 'moneyTransfer'>('credit');
   const [showNotification, setShowNotification] = useState(false);
-  const [notificationType, setNotificationType] = useState<'credit' | 'deposit' | 'moneyTransfer' | null>(null);
+  const [notificationType, setNotificationType] = useState<'credit' | 'deposit' | 'moneyTransfer' | 'error' | null>(null);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const handleSubmit = async (data: MoneyTransferFormData) => {
-    const response = await CustomerService.sendMoneyTransfer(data);
-    if (response.status === 201) {
+    try {
+      const response = await CustomerService.sendMoneyTransfer(data);
+      if (response.status === 200) {
+        setShowNotification(true);
+        setNotificationType('moneyTransfer');
+        console.log('Submitted data:', response);
+      }
+    } catch (error) {
+      setErrorMessage('Виникла помилка при відправці грошового переказу.');
       setShowNotification(true);
-      setNotificationType('moneyTransfer');
-      console.log('Submitted data:', response);
+      setNotificationType('error');
     }
   };
 
   const handleDespositSubmit = async (data: DepositData) => {
-    const response = await CustomerService.sendDeposit(data);
-    if (response.status === 201) {
+    try {
+      const response = await CustomerService.sendDeposit(data);
+      if (response.status === 201) {
+        setShowNotification(true);
+        setNotificationType('deposit');
+        console.log('Deposit submit:', response);
+      }
+    } catch (error) {
+      setErrorMessage('Виникла помилка при відкритті депозиту.');
       setShowNotification(true);
-      setNotificationType('deposit');
-      console.log('Deposit submit:', response);
+      setNotificationType('error');
     }
   };
 
   const handleCreditSubmit = async (data: CreditData) => {
-    const response = await CustomerService.sendCredit(data);
-    if (response.status === 201) {
+    try {
+      const response = await CustomerService.sendCredit(data);
+      if (response.status === 201) {
+        setShowNotification(true);
+        setNotificationType('credit');
+        console.log('Credit submit:', response);
+      }
+    } catch (error) {
+      setErrorMessage('Виникла помилка при оформленні кредиту.');
       setShowNotification(true);
-      setNotificationType('credit');
-      console.log('Credit submit:', response);
+      setNotificationType('error');
     }
   };
 
   const handleModalClose = () => {
     setShowNotification(false);
     setNotificationType(null);
+    setErrorMessage(null);
   };
 
   return (
@@ -64,14 +83,20 @@ const ServicePage: React.FC = () => {
       {showNotification && (
         <NotificationModal title="Повідомлення" duration={15000} onClose={handleModalClose}>
           <div className="notification-content">
-            {notificationType === 'credit' && (
-              <p>Вітання! Ваш кредит успішно оформлений!</p>
-            )}
-            {notificationType === 'deposit' && (
-              <p>Вітання! Ваш депозит успішно оформлений!</p>
-            )}
-            {notificationType === 'moneyTransfer' && (
-              <p>Вітання! Ваш грошовий переказ успішно відправлений!</p>
+            {notificationType === 'error' ? (
+              <p>{errorMessage}</p>
+            ) : (
+              <>
+                {notificationType === 'credit' && (
+                  <p>Вітання! Ваш кредит успішно оформлений!</p>
+                )}
+                {notificationType === 'deposit' && (
+                  <p>Вітання! Ваш депозит успішно оформлений!</p>
+                )}
+                {notificationType === 'moneyTransfer' && (
+                  <p>Вітання! Ваш грошовий переказ успішно відправлений!</p>
+                )}
+              </>
             )}
             <div className="buttons-container">
               <button className="btn btn-primary" type="button" onClick={handleModalClose}>

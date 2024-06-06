@@ -55,7 +55,7 @@ export const CustomerService: CustomerService = {
                     }
                 }
             );
-            console.log(response.data);
+            console.log(response);
             return response;
         } catch (error) {
             console.error('Error when sending a request:', error);
