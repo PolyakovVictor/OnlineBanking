@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import TermsModal from '../modal-terms-window/modal-terms-window';
 
 interface CreditCalcProps {
   onSubmit: (data: any) => void;
@@ -21,6 +22,7 @@ const CreditCalc: React.FC<CreditCalcProps> = ({
 }) => {
   const [loanAmount, setLoanAmount] = useState<number>(minLoanAmount);
   const [loanTerm, setLoanTerm] = useState<number>(minTerm);
+  const [showTermsModal, setShowTermsModal] = useState<boolean>(false);
 
   const calculateMonthlyPayment = (loanAmount: number, loanTerm: number) => {
     const monthlyInterestRate = annualInterestRate / 12 / 100;
@@ -33,7 +35,7 @@ const CreditCalc: React.FC<CreditCalcProps> = ({
 
   const monthlyPayment = calculateMonthlyPayment(loanAmount, loanTerm);
 
-  const handleSubmit = () => {
+  const handleAcceptTerms = () => {
     const loanData = {
       amount: loanAmount,
       term: loanTerm * 12,
@@ -44,6 +46,11 @@ const CreditCalc: React.FC<CreditCalcProps> = ({
     };
 
     onSubmit(loanData);
+    setShowTermsModal(false);
+  };
+
+  const handleOpenTermsModal = () => {
+    setShowTermsModal(true);
   };
 
   return (
@@ -105,11 +112,17 @@ const CreditCalc: React.FC<CreditCalcProps> = ({
               {monthlyPayment.toFixed(2)} {currency}
             </p>
           </div>
-          <button className="btn btn-primary" onClick={handleSubmit}>
+          <button className="btn btn-primary" onClick={handleOpenTermsModal}>
             Оформити кредит
           </button>
         </div>
       </div>
+
+      <TermsModal
+        show={showTermsModal}
+        onHide={() => setShowTermsModal(false)}
+        onAccept={handleAcceptTerms}
+      />
     </div>
   );
 };
