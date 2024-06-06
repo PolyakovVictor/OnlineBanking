@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import TermsModal from '../modal-terms-window/modal-terms-window';
+import TermsModal from '../modal-credit-terms-window/modal-credit-terms-window';
 
 interface CreditCalcProps {
   onSubmit: (data: any) => void;

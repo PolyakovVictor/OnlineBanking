@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import DepositTermsModal from '../modal-deposit-terms-window/modal-deposit-terms-window';
 
 interface DepositCalcProps {
   onSubmit: (data: any) => void;
@@ -21,6 +22,7 @@ const DepositCalc: React.FC<DepositCalcProps> = ({
 }) => {
   const [deposit, setDeposit] = useState<number>(initialDeposit);
   const [term, setTerm] = useState<number>(1);
+  const [showTermsModal, setShowTermsModal] = useState<boolean>(false);
 
   const calculateTotalAmount = (deposit: number, term: number) => {
     const interest = (deposit * (annualInterestRate / 100)) * (term / 12);
@@ -31,7 +33,7 @@ const DepositCalc: React.FC<DepositCalcProps> = ({
 
   const totalAmount = calculateTotalAmount(deposit, term);
 
-  const handleSubmit = () => {
+  const handleAcceptTerms = () => {
     const depositData = {
       amount: deposit,
       term: term,
@@ -41,6 +43,11 @@ const DepositCalc: React.FC<DepositCalcProps> = ({
     };
 
     onSubmit(depositData);
+    setShowTermsModal(false);
+  };
+
+  const handleOpenTermsModal = () => {
+    setShowTermsModal(true);
   };
 
   return (
@@ -101,11 +108,17 @@ const DepositCalc: React.FC<DepositCalcProps> = ({
               {(totalAmount - deposit).toFixed(2)} {currency}
             </p>
           </div>
-          <button className="btn btn-primary" onClick={handleSubmit}>
+          <button className="btn btn-primary" onClick={handleOpenTermsModal}>
             Відкрити депозит
           </button>
         </div>
       </div>
+
+      <DepositTermsModal
+        show={showTermsModal}
+        onHide={() => setShowTermsModal(false)}
+        onAccept={handleAcceptTerms}
+      />
     </div>
   );
 };
